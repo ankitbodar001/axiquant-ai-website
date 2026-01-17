@@ -3,6 +3,7 @@
 ## ✅ What You Have
 
 A complete, modern website with:
+
 - ✅ Pure HTML/CSS/JavaScript (no framework issues!)
 - ✅ Dark theme with Navy Blue & Gold colors
 - ✅ 5 pages: Home, About, Services, Careers, Contact
@@ -15,7 +16,7 @@ A complete, modern website with:
 
 ## 📁 Project Structure
 
-```
+```Structure
 axiquant-website-new/
 ├── index.html          # Home page
 ├── about.html          # About page
@@ -37,6 +38,7 @@ axiquant-website-new/
 ### Step 1: Open Locally
 
 Simply open `index.html` in your browser:
+
 - **Windows**: Double-click `index.html`
 - **Mac**: Double-click `index.html`
 - **Or**: Right-click → Open With → Chrome/Firefox
@@ -49,7 +51,7 @@ Simply open `index.html` in your browser:
 2. **Try typing** in the fields - IT WILL WORK! 🎉
 3. Fill out the form
 4. Click "Send Message"
-5. Check your email: ankitbodar001@gmail.com
+5. Check your email: <ankitbodar001@gmail.com>
 
 ---
 
@@ -63,7 +65,7 @@ Simply open `index.html` in your browser:
    - Name it: `axiquant-website.zip`
 
 2. **Deploy**:
-   - Go to: https://app.netlify.com/drop
+   - Go to: <https://app.netlify.com/drop>
    - Drag the ZIP file
    - Done! Your site is live!
 
@@ -74,6 +76,7 @@ Simply open `index.html` in your browser:
 ### Method 2: GitHub + Netlify (Better for updates)
 
 1. **Create GitHub repo**:
+
 ```bash
 cd axiquant-website-new
 git init
@@ -83,14 +86,14 @@ git remote add origin https://github.com/YOUR_USERNAME/axiquant-ai.git
 git push -u origin main
 ```
 
-2. **Connect to Netlify**:
+1. **Connect to Netlify**:
    - Go to netlify.com
    - Click "Add new site" → "Import from Git"
    - Choose GitHub → Select your repo
    - **Build settings**: LEAVE BLANK (it's just HTML)
    - Click "Deploy"
 
-3. **Done!** Site is live!
+2. **Done!** Site is live!
 
 ---
 
@@ -127,7 +130,7 @@ git push -u origin main
 
 ## ✅ Contact Form (EmailJS)
 
-### Your Configured Settings:
+### Your Configured Settings
 
 ```javascript
 Service ID: service_8iub6d9
@@ -135,15 +138,15 @@ Template ID: template_6zzmzpm
 Public Key: ttowYJCftsKzoSAGO
 ```
 
-### How It Works:
+### How It Works
 
 1. User fills form on your website
 2. Clicks "Send Message"
-3. **EmailJS sends email directly** to: ankitbodar001@gmail.com
+3. **EmailJS sends email directly** to: <ankitbodar001@gmail.com>
 4. User sees success message
 5. You receive the email! 📧
 
-### Test It:
+### Test It
 
 1. Open `contact.html` in browser
 2. Fill out form
@@ -169,6 +172,7 @@ Edit `css/style.css`, lines 10-12:
 ### Update Content
 
 Just edit the HTML files:
+
 - `index.html` - Home page content
 - `about.html` - About content
 - `services.html` - Services content
@@ -178,10 +182,13 @@ Just edit the HTML files:
 
 1. Put logo in root folder: `logo.png`
 2. Edit all HTML files, find:
+
 ```html
 <span class="text-gradient">AXI</span>QUANT
 ```
-3. Replace with:
+
+1. Replace with:
+
 ```html
 <img src="logo.png" alt="AxiQuant AI" style="height: 40px;">
 ```
@@ -205,6 +212,7 @@ Just edit the HTML files:
 ### Issue: Contact form not working
 
 **Check**:
+
 1. EmailJS script is loaded (check browser console)
 2. Internet connection is active
 3. Form fields are filled correctly
@@ -214,6 +222,7 @@ Just edit the HTML files:
 **Reason**: Some CSS might need a local server
 
 **Solution**: Use Live Server
+
 ```bash
 # Install globally
 npm install -g live-server
@@ -226,7 +235,7 @@ live-server
 ### Issue: DNS not propagating
 
 **Wait**: 24-48 hours
-**Check**: https://whatsmydns.net
+**Check**: <https://whatsmydns.net>
 
 ---
 
@@ -235,7 +244,8 @@ live-server
 **Subject**: New Contact Form: [subject]
 
 **Body**:
-```
+
+```Mail
 You received a new message from your website contact form!
 
 From: [Name]
@@ -268,11 +278,12 @@ Sent via AxiQuant AI Contact Form
 
 ---
 
-## 🎉 You're Done!
+## 🎉 You're Done
 
 Your professional website is complete and ready to go live!
 
 **Next Steps:**
+
 1. Test locally
 2. Deploy to Netlify
 3. Buy domain
@@ -286,7 +297,7 @@ Your professional website is complete and ready to go live!
 
 ## 📞 Questions?
 
-Email: ankitbodar001@gmail.com
+Email: <ankitbodar001@gmail.com>
 
 ---
 
