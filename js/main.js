@@ -6,18 +6,33 @@
 emailjs.init('ttowYJCftsKzoSAGO');
 
 // ========================================
-// Mobile Menu Toggle
+// Mobile Menu Toggle (Enhanced with Accessibility)
 // ========================================
 
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
 const mobileMenu = document.querySelector('.mobile-menu');
 const body = document.body;
 
-if (mobileMenuBtn) {
+if (mobileMenuBtn && mobileMenu) {
   mobileMenuBtn.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.contains('open');
+    
+    // Toggle classes
     mobileMenuBtn.classList.toggle('active');
     mobileMenu.classList.toggle('open');
-    body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    body.style.overflow = !isOpen ? 'hidden' : '';
+    
+    // Update ARIA attributes for accessibility
+    mobileMenuBtn.setAttribute('aria-expanded', !isOpen);
+    mobileMenu.setAttribute('aria-hidden', isOpen);
+    
+    // Focus first link when menu opens
+    if (!isOpen) {
+      const firstLink = mobileMenu.querySelector('a');
+      if (firstLink) {
+        setTimeout(() => firstLink.focus(), 100);
+      }
+    }
   });
 
   // Close mobile menu when clicking a link
@@ -26,7 +41,38 @@ if (mobileMenuBtn) {
       mobileMenuBtn.classList.remove('active');
       mobileMenu.classList.remove('open');
       body.style.overflow = '';
+      
+      // Update ARIA attributes
+      mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
     });
+  });
+  
+  // Close menu with Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+      mobileMenuBtn.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      body.style.overflow = '';
+      
+      // Update ARIA and return focus to button
+      mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      mobileMenuBtn.focus();
+    }
+  });
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+      if (mobileMenu.classList.contains('open')) {
+        mobileMenuBtn.classList.remove('active');
+        mobileMenu.classList.remove('open');
+        body.style.overflow = '';
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+      }
+    }
   });
 }
 
@@ -50,7 +96,7 @@ window.addEventListener('scroll', () => {
 });
 
 // ========================================
-// Active Nav Link
+// Active Nav Link (Enhanced with ARIA)
 // ========================================
 
 const currentLocation = location.pathname.split('/').pop() || 'index.html';
@@ -60,6 +106,7 @@ navLinks.forEach(link => {
   const href = link.getAttribute('href');
   if (href === currentLocation || (href === 'index.html' && currentLocation === '')) {
     link.classList.add('active');
+    link.setAttribute('aria-current', 'page');
   }
 });
 
@@ -86,12 +133,27 @@ document.querySelectorAll('.card, .service-card, .benefit-card, .value-card').fo
 });
 
 // ========================================
-// Contact Form with EmailJS
+// Contact Form with EmailJS (Enhanced with Accessibility)
 // ========================================
 
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
+  // Real-time form validation
+  const formFields = contactForm.querySelectorAll('input[required], textarea[required]');
+  
+  formFields.forEach(field => {
+    // Validate on blur (when user leaves field)
+    field.addEventListener('blur', () => validateField(field));
+    
+    // Clear error on input if field was previously invalid
+    field.addEventListener('input', () => {
+      if (field.classList.contains('input-error')) {
+        validateField(field);
+      }
+    });
+  });
+  
   contactForm.addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -100,19 +162,39 @@ if (contactForm) {
     const successMsg = document.getElementById('successMsg');
     const errorMsg = document.getElementById('errorMsg');
     
+    // Validate all required fields
+    let isValid = true;
+    formFields.forEach(field => {
+      if (!validateField(field)) {
+        isValid = false;
+      }
+    });
+    
+    if (!isValid) {
+      // Focus first error field
+      const firstError = contactForm.querySelector('.input-error');
+      if (firstError) {
+        firstError.focus();
+        announceToScreenReader('Please correct the errors in the form');
+      }
+      return;
+    }
+    
     // Hide any previous messages
     if (successMsg) successMsg.style.display = 'none';
     if (errorMsg) errorMsg.style.display = 'none';
     
     // Disable button and show loading
     submitBtn.disabled = true;
+    submitBtn.setAttribute('aria-busy', 'true');
     submitBtn.innerHTML = '<span class="loading"></span> Sending...';
+    announceToScreenReader('Sending message, please wait');
     
     // Get form data
     const templateParams = {
       from_name: contactForm.from_name.value,
       from_email: contactForm.from_email.value,
-      company: contactForm.company.value || 'Not provided',
+      company: contactForm.company ? contactForm.company.value : 'Not provided',
       subject: contactForm.subject.value,
       message: contactForm.message.value
     };
@@ -125,14 +207,23 @@ if (contactForm) {
         // Show success message
         if (successMsg) {
           successMsg.style.display = 'flex';
+          successMsg.setAttribute('role', 'alert');
+          announceToScreenReader('Message sent successfully! We will get back to you soon.');
+          
           setTimeout(() => {
             successMsg.style.display = 'none';
           }, 5000);
         }
         
-        // Reset form
+        // Reset form and clear any validation states
         contactForm.reset();
+        formFields.forEach(field => {
+          field.classList.remove('input-error', 'input-success');
+          field.setAttribute('aria-invalid', 'false');
+        });
+        
         submitBtn.disabled = false;
+        submitBtn.setAttribute('aria-busy', 'false');
         submitBtn.innerHTML = originalText;
       })
       .catch(function(error) {
@@ -141,31 +232,226 @@ if (contactForm) {
         // Show error message
         if (errorMsg) {
           errorMsg.style.display = 'flex';
-          errorMsg.textContent = 'Failed to send message. Please try again or email us directly.';
+          errorMsg.setAttribute('role', 'alert');
+          errorMsg.textContent = 'Failed to send message. Please try again or email us directly at info@axiquantai.com';
+          announceToScreenReader('Failed to send message. Please try again.');
         }
         
         submitBtn.disabled = false;
+        submitBtn.setAttribute('aria-busy', 'false');
         submitBtn.innerHTML = originalText;
       });
   });
 }
 
 // ========================================
-// Smooth Scroll for Anchor Links
+// Form Validation Function
+// ========================================
+
+function validateField(field) {
+  const value = field.value.trim();
+  const fieldName = field.labels && field.labels[0] ? field.labels[0].textContent.replace('*', '').trim() : 'This field';
+  let errorMessage = '';
+  
+  // Check if required field is empty
+  if (field.hasAttribute('required') && !value) {
+    errorMessage = `${fieldName} is required`;
+  }
+  // Check email format
+  else if (field.type === 'email' && value) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      errorMessage = 'Please enter a valid email address';
+    }
+  }
+  
+  // Update field state
+  if (errorMessage) {
+    field.classList.add('input-error');
+    field.classList.remove('input-success');
+    field.setAttribute('aria-invalid', 'true');
+    
+    // Show error message
+    let errorSpan = field.parentElement.querySelector('.error-message');
+    if (!errorSpan) {
+      errorSpan = document.createElement('span');
+      errorSpan.className = 'error-message';
+      errorSpan.setAttribute('role', 'alert');
+      field.parentElement.appendChild(errorSpan);
+    }
+    errorSpan.textContent = errorMessage;
+    errorSpan.style.display = 'flex';
+    
+    return false;
+  } else {
+    field.classList.remove('input-error');
+    if (value) {
+      field.classList.add('input-success');
+    }
+    field.setAttribute('aria-invalid', 'false');
+    
+    // Hide error message
+    const errorSpan = field.parentElement.querySelector('.error-message');
+    if (errorSpan) {
+      errorSpan.textContent = '';
+      errorSpan.style.display = 'none';
+    }
+    
+    return true;
+  }
+}
+
+// ========================================
+// Screen Reader Announcements
+// ========================================
+
+function announceToScreenReader(message, priority = 'polite') {
+  let announcer = document.getElementById('screen-reader-announcer');
+  
+  if (!announcer) {
+    announcer = document.createElement('div');
+    announcer.id = 'screen-reader-announcer';
+    announcer.className = 'sr-only';
+    announcer.setAttribute('aria-live', priority);
+    announcer.setAttribute('aria-atomic', 'true');
+    document.body.appendChild(announcer);
+  }
+  
+  announcer.textContent = message;
+  
+  // Clear after announcement
+  setTimeout(() => {
+    announcer.textContent = '';
+  }, 1000);
+}
+
+// ========================================
+// Smooth Scroll for Anchor Links (Enhanced)
 // ========================================
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
+    const href = this.getAttribute('href');
+    if (href === '#') return;
+    
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
+    const target = document.querySelector(href);
+    
     if (target) {
+      // Smooth scroll
       target.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
+      
+      // Set focus for keyboard users
+      setTimeout(() => {
+        target.setAttribute('tabindex', '-1');
+        target.focus();
+        
+        // Remove tabindex after focus
+        target.addEventListener('blur', () => {
+          target.removeAttribute('tabindex');
+        }, { once: true });
+      }, 500);
     }
   });
 });
+
+// ========================================
+// Keyboard Navigation Enhancement
+// ========================================
+
+function initKeyboardNavigation() {
+  // Show focus outline only when using keyboard
+  let usingMouse = false;
+  
+  document.addEventListener('mousedown', () => {
+    usingMouse = true;
+  });
+  
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      usingMouse = false;
+    }
+  });
+  
+  // Arrow key navigation for main menu
+  const navMenu = document.querySelector('.nav-menu');
+  if (navMenu) {
+    const links = navMenu.querySelectorAll('.nav-link');
+    
+    links.forEach((link, index) => {
+      link.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' && links[index + 1]) {
+          e.preventDefault();
+          links[index + 1].focus();
+        }
+        if (e.key === 'ArrowLeft' && links[index - 1]) {
+          e.preventDefault();
+          links[index - 1].focus();
+        }
+      });
+    });
+  }
+}
+
+// ========================================
+// Detect User Preferences
+// ========================================
+
+function detectUserPreferences() {
+  // Reduced motion
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  
+  if (prefersReducedMotion.matches) {
+    document.body.classList.add('reduce-motion');
+  }
+  
+  prefersReducedMotion.addEventListener('change', (e) => {
+    if (e.matches) {
+      document.body.classList.add('reduce-motion');
+    } else {
+      document.body.classList.remove('reduce-motion');
+    }
+  });
+  
+  // High contrast
+  const prefersHighContrast = window.matchMedia('(prefers-contrast: high)');
+  
+  if (prefersHighContrast.matches) {
+    document.body.classList.add('high-contrast');
+  }
+  
+  prefersHighContrast.addEventListener('change', (e) => {
+    if (e.matches) {
+      document.body.classList.add('high-contrast');
+    } else {
+      document.body.classList.remove('high-contrast');
+    }
+  });
+}
+
+// ========================================
+// Initialize Accessibility Features
+// ========================================
+
+function initAccessibility() {
+  initKeyboardNavigation();
+  detectUserPreferences();
+  
+  console.log('✅ Accessibility features initialized');
+}
+
+// ========================================
+// Initialize Everything on DOM Ready
+// ========================================
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAccessibility);
+} else {
+  initAccessibility();
+}
 
 // ========================================
 // Loading Spinner Animation
@@ -196,4 +482,4 @@ document.head.appendChild(style);
 
 console.log('%cAxiQuant AI', 'font-size: 24px; font-weight: bold; color: #d4a574;');
 console.log('%cPowering Decisions with Engineered Intelligence', 'font-size: 14px; color: #9ca3af;');
-console.log('%cWebsite: https://axiquantai.in', 'color: #3b82f6;');
+console.log('%cWebsite: https://axiquantai.com', 'color: #3b82f6;');

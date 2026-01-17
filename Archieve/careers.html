@@ -26,31 +26,29 @@
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    <header role="banner">
-        <nav class="navbar container" role="navigation" aria-label="Main navigation">
+    <header>
+        <nav class="navbar container">
             <a href="index.html" class="logo"><span class="text-gradient">AXI</span>QUANT<span class="logo-ai">AI</span></a>
-            <ul class="nav-menu" role="menubar">
-                <li role="none"><a href="index.html" class="nav-link" role="menuitem">Home</a></li>
-                <li role="none"><a href="about.html" class="nav-link" role="menuitem">About</a></li>
-                <li role="none"><a href="services.html" class="nav-link" role="menuitem">Services</a></li>
-                <li role="none"><a href="careers.html" class="nav-link" role="menuitem">Careers</a></li>
-                <li role="none"><a href="contact.html" class="nav-link btn-nav" role="menuitem">Get Started</a></li>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="services.html" class="nav-link">Services</a></li>
+                <li><a href="careers.html" class="nav-link">Careers</a></li>
+                <li><a href="contact.html" class="nav-link btn-nav">Get Started</a></li>
             </ul>
-            <button class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+            <button class="mobile-menu-btn"><span></span><span></span><span></span></button>
         </nav>
-        <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
-            <ul class="mobile-nav-menu" role="menu">
-                <li role="none"><a href="index.html" class="mobile-nav-link" role="menuitem">Home</a></li>
-                <li role="none"><a href="about.html" class="mobile-nav-link" role="menuitem">About</a></li>
-                <li role="none"><a href="services.html" class="mobile-nav-link" role="menuitem">Services</a></li>
-                <li role="none"><a href="careers.html" class="mobile-nav-link" role="menuitem">Careers</a></li>
-                <li role="none"><a href="contact.html" class="mobile-nav-link btn-primary" role="menuitem">Get Started</a></li>
+        <div class="mobile-menu">
+            <ul class="mobile-nav-menu">
+                <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+                <li><a href="about.html" class="mobile-nav-link">About</a></li>
+                <li><a href="services.html" class="mobile-nav-link">Services</a></li>
+                <li><a href="careers.html" class="mobile-nav-link">Careers</a></li>
+                <li><a href="contact.html" class="mobile-nav-link btn-primary">Get Started</a></li>
             </ul>
         </div>
     </header>
 
-    <main id="main-content" role="main">
     <section class="page-hero">
         <div class="container">
             <h1>Join <span class="text-gradient">Our Team</span></h1>
@@ -242,9 +240,7 @@
         </div>
     </section>
 
-    </main>
-
-    <footer role="contentinfo">
+    <footer>
         <div class="container">
             <div class="footer-grid">
                 <div><div class="logo mb-1"><span class="text-gradient">AXI</span>QUANT<span class="logo-ai">AI</span></div></div>
@@ -253,7 +249,6 @@
                 <div><h4 class="footer-title">Contact</h4><p style="color: var(--text-secondary);">info@axiquantai.com</p></div>
             </div>
             <div class="footer-bottom"><p>&copy; 2026 AxiQuant AI. All rights reserved.</p></div>
-            <nav aria-label="Social media links">
             <div class="social-links">
                 <a href="https://www.linkedin.com/company/axiquant-ai" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -261,8 +256,10 @@
                     </svg>
                 </a>
             </div>
-            </nav>
         </div>
     </footer>
 
-    <script data-cfasync="f
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
