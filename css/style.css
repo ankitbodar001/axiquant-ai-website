@@ -570,3 +570,73 @@ footer {
     height: 40px;
   }
 }
+.service-description {
+    margin: 1.5rem 0 2rem;
+    padding: 1.5rem;
+    background: rgba(59, 130, 246, 0.05);
+    border-left: 3px solid var(--primary-gold);
+    border-radius: 8px;
+}
+
+.service-description p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.service-description p:last-child {
+    margin-bottom: 0;
+}
+
+.service-features li strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.benefit-card p {
+    line-height: 1.7;
+    font-size: 0.9375rem;
+}
+
+.experience-section {
+    padding: 2rem 0;
+}
+
+.experience-item h4 {
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.experience-item p {
+    font-size: 1rem;
+}
+
+.value-card p {
+    line-height: 1.7;
+    font-size: 0.9375rem;
+}
+
+@media (max-width: 768px) {
+    .service-description {
+        padding: 1rem;
+        margin: 1rem 0 1.5rem;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .experience-item {
+        margin-bottom: 2rem !important;
+    }
+}
