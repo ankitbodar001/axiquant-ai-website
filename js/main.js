@@ -135,6 +135,7 @@ document.querySelectorAll('.card, .service-card, .benefit-card, .value-card').fo
 // ========================================
 // Contact Form with EmailJS (Enhanced with Accessibility)
 // ========================================
+let formSubmitted = false;
 
 const contactForm = document.getElementById('contactForm');
 
@@ -143,19 +144,27 @@ if (contactForm) {
   const formFields = contactForm.querySelectorAll('input[required], textarea[required]');
   
   formFields.forEach(field => {
-    // Validate on blur (when user leaves field)
-    field.addEventListener('blur', () => validateField(field));
+    // Only validate after user has interacted with the field
+    field.addEventListener('blur', () => {
+      // Only show errors after first submit attempt OR if field has been filled
+      if (formSubmitted || field.value.trim()) {
+        validateField(field, true);
+      }
+    });
     
     // Clear error on input if field was previously invalid
     field.addEventListener('input', () => {
       if (field.classList.contains('input-error')) {
-        validateField(field);
+        validateField(field, true);
       }
     });
   });
   
   contactForm.addEventListener('submit', function(e) {
     e.preventDefault();
+    
+    // Set flag to show errors from now on
+    formSubmitted = true;
     
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
@@ -165,7 +174,7 @@ if (contactForm) {
     // Validate all required fields
     let isValid = true;
     formFields.forEach(field => {
-      if (!validateField(field)) {
+      if (!validateField(field, true)) {
         isValid = false;
       }
     });
@@ -180,6 +189,7 @@ if (contactForm) {
       return;
     }
     
+    // Rest of your form submission code stays the same...
     // Hide any previous messages
     if (successMsg) successMsg.style.display = 'none';
     if (errorMsg) errorMsg.style.display = 'none';
@@ -215,11 +225,19 @@ if (contactForm) {
           }, 5000);
         }
         
-        // Reset form and clear any validation states
+        // Reset form and clear validation
         contactForm.reset();
+        formSubmitted = false; // Reset flag
         formFields.forEach(field => {
           field.classList.remove('input-error', 'input-success');
           field.setAttribute('aria-invalid', 'false');
+          
+          // Clear error messages
+          const errorSpan = field.parentElement.querySelector('.error-message');
+          if (errorSpan) {
+            errorSpan.textContent = '';
+            errorSpan.style.display = 'none';
+          }
         });
         
         submitBtn.disabled = false;
@@ -248,7 +266,7 @@ if (contactForm) {
 // Form Validation Function
 // ========================================
 
-function validateField(field) {
+function validateField(field, showError = true) {
   const value = field.value.trim();
   const fieldName = field.labels && field.labels[0] ? field.labels[0].textContent.replace('*', '').trim() : 'This field';
   let errorMessage = '';
@@ -266,7 +284,7 @@ function validateField(field) {
   }
   
   // Update field state
-  if (errorMessage) {
+  if (errorMessage && showError) {
     field.classList.add('input-error');
     field.classList.remove('input-success');
     field.setAttribute('aria-invalid', 'true');
@@ -283,7 +301,7 @@ function validateField(field) {
     errorSpan.style.display = 'flex';
     
     return false;
-  } else {
+  } else if (!errorMessage) {
     field.classList.remove('input-error');
     if (value) {
       field.classList.add('input-success');
@@ -299,6 +317,8 @@ function validateField(field) {
     
     return true;
   }
+  
+  return !errorMessage;
 }
 
 // ========================================
