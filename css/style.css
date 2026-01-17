@@ -640,3 +640,53 @@ footer {
         margin-bottom: 2rem !important;
     }
 }
+/* Social Media Links Styling */
+/* Add this to your css/style.css file */
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.social-link:hover {
+    background: var(--primary-gold);
+    color: var(--primary-navy);
+    transform: translateY(-3px);
+    border-color: var(--primary-gold);
+}
+
+.social-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .social-links {
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+}
+
+/* Footer bottom links spacing */
+.footer-bottom-links a {
+    transition: color 0.3s ease;
+}
+
+.footer-bottom-links a:hover {
+    color: var(--primary-gold);
+}
