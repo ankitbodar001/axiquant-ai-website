@@ -310,7 +310,7 @@
         <input 
             type="text" 
             id="name" 
-            name="name"
+            name="from_name"
             required
             aria-required="true"
             aria-describedby="name-hint"
@@ -330,7 +330,7 @@
         <input 
             type="email" 
             id="email" 
-            name="email"
+            name="from_email"
             required
             aria-required="true"
             aria-describedby="email-hint"
@@ -343,21 +343,40 @@
         <span class="error-message" role="alert" aria-live="polite"></span>
     </div>
     
-    <!-- Phone Field -->
+    <!-- Company Field (Optional) -->
     <div class="form-group">
-        <label for="phone">
-            Phone Number (Optional)
+        <label for="company">
+            Company (Optional)
         </label>
         <input 
-            type="tel" 
-            id="phone" 
-            name="phone"
-            aria-describedby="phone-hint"
-            autocomplete="tel"
+            type="text" 
+            id="company" 
+            name="company"
+            aria-describedby="company-hint"
         >
-        <span id="phone-hint" class="form-hint">
-            Include country code if outside India
+        <span id="company-hint" class="form-hint">
+            Your company or organization name
         </span>
+    </div>
+    
+    <!-- Subject Field -->
+    <div class="form-group">
+        <label for="subject" class="required">
+            Subject
+        </label>
+        <input 
+            type="text" 
+            id="subject" 
+            name="subject"
+            required
+            aria-required="true"
+            aria-describedby="subject-hint"
+            aria-invalid="false"
+        >
+        <span id="subject-hint" class="form-hint">
+            Brief subject of your inquiry
+        </span>
+        <span class="error-message" role="alert" aria-live="polite"></span>
     </div>
     
     <!-- Message Field -->
@@ -392,11 +411,26 @@
     
     <!-- Success/Error Messages -->
     <div 
-        class="form-feedback" 
+        id="successMsg"
+        class="success-message" 
         role="status" 
         aria-live="polite" 
         aria-atomic="true"
-    ></div>
+        style="display: none;"
+    >
+        ✓ Thank you! We'll get back to you soon.
+    </div>
+    
+    <div 
+        id="errorMsg"
+        class="error-message-alert" 
+        role="alert" 
+        aria-live="assertive" 
+        aria-atomic="true"
+        style="display: none;"
+    >
+        Failed to send message. Please try again or email us directly.
+    </div>
 </form>
 
     <!-- Footer -->
