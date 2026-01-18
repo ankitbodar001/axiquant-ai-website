@@ -1952,3 +1952,170 @@ select:focus {
         margin-bottom: 1.25rem;
     }
 }
+/* ========================================
+   FIX: CTA Sections on Home Page
+   Add this to css/style.css or css/pages.css
+   ======================================== */
+
+/* ========================================
+   1. Center all CTA section content
+   ======================================== */
+
+/* Contact Us CTA Section */
+.section.text-center,
+section[style*="background: linear-gradient"] {
+    text-align: center !important;
+    padding: 4rem 0 !important;
+}
+
+.section.text-center .container,
+section[style*="background: linear-gradient"] .container {
+    max-width: 900px !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+}
+
+/* Center all headings in CTA sections */
+.section.text-center h2,
+section[style*="background: linear-gradient"] h2 {
+    text-align: center !important;
+    margin: 0 auto 1rem !important;
+}
+
+/* Center all paragraphs in CTA sections */
+.section.text-center p,
+section[style*="background: linear-gradient"] p {
+    text-align: center !important;
+    margin: 0 auto 2rem !important;
+    max-width: 700px !important;
+}
+
+/* Center buttons in CTA sections */
+.section.text-center .btn,
+section[style*="background: linear-gradient"] .btn {
+    margin: 0 auto !important;
+    display: inline-flex !important;
+}
+
+/* ========================================
+   2. Specific fixes for each CTA section
+   ======================================== */
+
+/* "Ready to Work With Us?" section */
+section.section[style*="background: linear-gradient"] {
+    background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-blue) 100%) !important;
+    padding: 5rem 0 !important;
+}
+
+section.section[style*="background: linear-gradient"] h2 {
+    color: white !important;
+    font-size: clamp(2rem, 4vw, 2.5rem) !important;
+    margin-bottom: 1rem !important;
+}
+
+section.section[style*="background: linear-gradient"] p {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1.125rem !important;
+}
+
+/* ========================================
+   3. Fix Contact section on home page
+   ======================================== */
+
+/* If there's a contact section on home page */
+.contact-cta,
+.cta-section {
+    text-align: center;
+    padding: 5rem 0;
+}
+
+.contact-cta h2,
+.cta-section h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.contact-cta p,
+.cta-section p {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 2rem;
+}
+
+/* ========================================
+   4. Ensure consistent CTA styling
+   ======================================== */
+
+/* All CTA sections should have centered content */
+.section[class*="cta"],
+.section.bg-gradient,
+section[style*="text-align: center"] {
+    text-align: center !important;
+}
+
+.section[class*="cta"] .container,
+.section.bg-gradient .container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   5. Fix blue gradient sections specifically
+   ======================================== */
+
+/* Target sections with blue gradient background */
+section[style*="135deg"] {
+    padding: 5rem 2rem !important;
+}
+
+section[style*="135deg"] .container {
+    max-width: 900px !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+}
+
+section[style*="135deg"] h2,
+section[style*="135deg"] p,
+section[style*="135deg"] .btn {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* ========================================
+   6. Responsive adjustments
+   ======================================== */
+
+@media (max-width: 768px) {
+    .section.text-center,
+    section[style*="background: linear-gradient"] {
+        padding: 3rem 1.5rem !important;
+    }
+    
+    .section.text-center h2,
+    section[style*="background: linear-gradient"] h2 {
+        font-size: 1.75rem !important;
+    }
+    
+    .section.text-center p,
+    section[style*="background: linear-gradient"] p {
+        font-size: 1rem !important;
+        padding: 0 !important;
+    }
+}
+
+/* ========================================
+   7. Fix for inline styles (highest priority)
+   ======================================== */
+
+/* Override any inline styles that might be causing issues */
+section[style] h2[style*="color: white"] {
+    text-align: center !important;
+    margin: 0 auto 1rem !important;
+}
+
+section[style] p[style*="color: rgba"] {
+    text-align: center !important;
+    margin: 1rem auto 2rem !important;
+    max-width: 700px !important;
+}
