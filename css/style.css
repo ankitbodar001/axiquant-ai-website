@@ -672,6 +672,9 @@ footer {
 .social-link svg {
     width: 20px;
     height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    flex-shrink: 0;
 }
 
 /* Mobile responsive */
@@ -679,6 +682,21 @@ footer {
     .social-links {
         justify-content: center;
         margin-top: 1.5rem;
+    }
+    
+    /* Fix LinkedIn icon size on mobile */
+    .social-link {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+    }
+    
+    .social-link svg {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px !important;
+        min-height: 22px !important;
     }
 }
 
@@ -2137,12 +2155,17 @@ section[style] p[style*="color: rgba"] {
   cursor: pointer;
   padding: 0.75rem;
   position: relative;
-  z-index: 1001;
+  z-index: 1002;
   /* Make it bigger for touch */
   min-width: 48px;
   min-height: 48px;
   justify-content: center;
   align-items: center;
+  /* Ensure touch events work */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .mobile-menu-btn span {
@@ -2179,10 +2202,12 @@ section[style] p[style*="color: rgba"] {
   left: 0;
   width: 100%;
   height: calc(100vh - 80px);
+  height: calc(100dvh - 80px); /* Use dynamic viewport height for mobile */
   background: rgba(10, 14, 26, 0.98);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   padding: 2rem;
-  z-index: 1000;
+  z-index: 1001;
   
   /* Hidden by default */
   transform: translateX(-100%);
@@ -2191,6 +2216,7 @@ section[style] p[style*="color: rgba"] {
   
   transition: all 0.3s ease;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Open state */
@@ -2224,9 +2250,14 @@ section[style] p[style*="color: rgba"] {
   min-height: 48px;
   display: flex;
   align-items: center;
+  
+  /* Ensure touch events work */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .mobile-nav-link:hover,
+.mobile-nav-link:active,
 .mobile-nav-link.active {
   color: var(--primary-gold);
   background: rgba(212, 165, 116, 0.1);
@@ -2247,6 +2278,11 @@ section[style] p[style*="color: rgba"] {
   .mobile-menu-btn {
     display: flex !important;
   }
+  
+  /* Ensure header has proper z-index */
+  header {
+    z-index: 1000;
+  }
 }
 
 /* ========================================
@@ -2254,9 +2290,10 @@ section[style] p[style*="color: rgba"] {
    ======================================== */
 
 body.menu-open {
-  overflow: hidden;
+  overflow: hidden !important;
   position: fixed;
   width: 100%;
+  height: 100%;
 }
 
 /* ========================================
@@ -2270,10 +2307,13 @@ body.menu-open {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 1000;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
+  /* Ensure touch events work */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .menu-overlay.active {
