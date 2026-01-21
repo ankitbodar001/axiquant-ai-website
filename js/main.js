@@ -2,8 +2,17 @@
 // AxiQuant AI - Main JavaScript
 // ========================================
 
-// Initialize EmailJS with your public key
-emailjs.init('ttowYJCftsKzoSAGO');
+// Initialize EmailJS with your public key (only if emailjs is loaded)
+if (typeof emailjs !== 'undefined') {
+  emailjs.init('ttowYJCftsKzoSAGO');
+} else {
+  // Try again after window loads
+  window.addEventListener('load', function() {
+    if (typeof emailjs !== 'undefined') {
+      emailjs.init('ttowYJCftsKzoSAGO');
+    }
+  });
+}
 
 // ========================================
 // Mobile Menu Toggle (Enhanced with Accessibility)
