@@ -84,27 +84,64 @@ document.addEventListener('DOMContentLoaded', function() {
       handleMenuToggle(e);
     }, { passive: false });
     
-    // Close menu when clicking a link
+    // Close menu when clicking a link - BUT allow navigation to happen
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
     mobileNavLinks.forEach(link => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', function(e) {
+        // Don't prevent default - let the link navigate
+        // Just close the menu after a small delay to allow navigation
+        const href = this.getAttribute('href');
+        console.log('Link clicked:', href);
+        
+        // Close menu visually
         closeMenu();
-        console.log('Link clicked, menu closing');
-      });
-    });
-    
-    // Close menu when clicking overlay
-    if (menuOverlay) {
-      menuOverlay.addEventListener('click', () => {
-        closeMenu();
-        console.log('Overlay clicked, menu closing');
+        
+        // If it's a same-page anchor link, handle it
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+        // For regular page links, navigation will happen naturally
       });
       
-      menuOverlay.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        closeMenu();
-        console.log('Overlay touched, menu closing');
+      // Handle touch events for mobile
+      link.addEventListener('touchend', function(e) {
+        const href = this.getAttribute('href');
+        console.log('Link touched:', href);
+        
+        // For external page links, navigate directly
+        if (href && !href.startsWith('#')) {
+          // Small delay to show menu closing animation
+          closeMenu();
+          setTimeout(() => {
+            window.location.href = href;
+          }, 100);
+          e.preventDefault();
+        }
+      }, { passive: false });
+    });
+    
+    // Close menu when clicking overlay (but not menu content)
+    if (menuOverlay) {
+      menuOverlay.addEventListener('click', (e) => {
+        // Only close if clicking the overlay itself, not menu items
+        if (e.target === menuOverlay) {
+          closeMenu();
+          console.log('Overlay clicked, menu closing');
+        }
       });
+      
+      menuOverlay.addEventListener('touchstart', (e) => {
+        // Only close if touching the overlay itself
+        if (e.target === menuOverlay) {
+          e.preventDefault();
+          closeMenu();
+          console.log('Overlay touched, menu closing');
+        }
+      }, { passive: false });
     }
     
     // Close menu with Escape key
