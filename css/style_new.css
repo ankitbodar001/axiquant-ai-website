@@ -1,15 +1,15 @@
 /* ========================================
    AxiQuant AI - Main Stylesheet
-   Dark Theme with Navy Blue & Gold
+   Multi-Theme Support: Dark, Light, Ocean, Warm
    ======================================== */
 
 :root {
-  /* Brand Colors */
+  /* Brand Colors (constant across themes) */
   --primary-navy: #1e3a8a;
   --primary-gold: #d4a574;
   --accent-blue: #3b82f6;
   
-  /* Dark Theme */
+  /* Dark Theme (Default) */
   --bg-primary: #0a0e1a;
   --bg-secondary: #111827;
   --bg-tertiary: #1f2937;
@@ -38,6 +38,298 @@
   
   /* Transitions */
   --transition: 0.3s ease;
+  
+  /* Card border */
+  --card-border: rgba(59, 130, 246, 0.1);
+  
+  /* Header background */
+  --header-bg: rgba(10, 14, 26, 0.7);
+  --header-bg-scrolled: rgba(10, 14, 26, 0.95);
+  
+  /* Footer background */
+  --footer-bg: #0a0e1a;
+  
+  /* Input background */
+  --input-bg: rgba(31, 41, 55, 0.5);
+  --input-border: rgba(59, 130, 246, 0.3);
+}
+
+/* ========================================
+   LIGHT THEME
+   ======================================== */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  
+  --card-border: rgba(30, 58, 138, 0.15);
+  --header-bg: rgba(255, 255, 255, 0.85);
+  --header-bg-scrolled: rgba(255, 255, 255, 0.98);
+  --footer-bg: #f1f5f9;
+  --input-bg: #ffffff;
+  --input-border: rgba(30, 58, 138, 0.2);
+  
+  --glow-gold: rgba(212, 165, 116, 0.2);
+  --glow-blue: rgba(59, 130, 246, 0.2);
+}
+
+[data-theme="light"] body::before {
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(30, 58, 138, 0.08) 0%, transparent 50%);
+}
+
+[data-theme="light"] .card,
+[data-theme="light"] .service-card,
+[data-theme="light"] .service-detail {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-color: var(--card-border);
+}
+
+[data-theme="light"] header {
+  border-bottom-color: rgba(30, 58, 138, 0.1);
+}
+
+[data-theme="light"] header.scrolled {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   OCEAN THEME (Light Blue)
+   ======================================== */
+[data-theme="ocean"] {
+  --bg-primary: #f0f9ff;
+  --bg-secondary: #e0f2fe;
+  --bg-tertiary: #bae6fd;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  
+  --text-primary: #0c4a6e;
+  --text-secondary: #0369a1;
+  --text-tertiary: #0284c7;
+  
+  --primary-gold: #f59e0b;
+  --accent-blue: #0ea5e9;
+  
+  --card-border: rgba(14, 165, 233, 0.2);
+  --header-bg: rgba(240, 249, 255, 0.9);
+  --header-bg-scrolled: rgba(240, 249, 255, 0.98);
+  --footer-bg: #e0f2fe;
+  --input-bg: #ffffff;
+  --input-border: rgba(14, 165, 233, 0.3);
+  
+  --glow-gold: rgba(245, 158, 11, 0.25);
+  --glow-blue: rgba(14, 165, 233, 0.25);
+}
+
+[data-theme="ocean"] body::before {
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+}
+
+[data-theme="ocean"] .text-gradient {
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========================================
+   WARM THEME (Cream/Off-white)
+   ======================================== */
+[data-theme="warm"] {
+  --bg-primary: #fefce8;
+  --bg-secondary: #fef9c3;
+  --bg-tertiary: #fef08a;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  
+  --text-primary: #713f12;
+  --text-secondary: #a16207;
+  --text-tertiary: #ca8a04;
+  
+  --primary-gold: #b45309;
+  --primary-navy: #78350f;
+  --accent-blue: #d97706;
+  
+  --card-border: rgba(180, 83, 9, 0.15);
+  --header-bg: rgba(254, 252, 232, 0.9);
+  --header-bg-scrolled: rgba(254, 252, 232, 0.98);
+  --footer-bg: #fef9c3;
+  --input-bg: #ffffff;
+  --input-border: rgba(180, 83, 9, 0.2);
+  
+  --glow-gold: rgba(180, 83, 9, 0.2);
+  --glow-blue: rgba(217, 119, 6, 0.2);
+}
+
+[data-theme="warm"] body::before {
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(251, 191, 36, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+}
+
+[data-theme="warm"] .text-gradient {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========================================
+   MIDNIGHT THEME (Deep Purple/Dark)
+   ======================================== */
+[data-theme="midnight"] {
+  --bg-primary: #0f0a1e;
+  --bg-secondary: #1a1333;
+  --bg-tertiary: #2d2248;
+  --bg-card: rgba(45, 34, 72, 0.8);
+  
+  --text-primary: #f5f3ff;
+  --text-secondary: #ddd6fe;
+  --text-tertiary: #c4b5fd;
+  
+  --primary-gold: #c084fc;
+  --accent-blue: #8b5cf6;
+  
+  --card-border: rgba(139, 92, 246, 0.2);
+  --header-bg: rgba(15, 10, 30, 0.8);
+  --header-bg-scrolled: rgba(15, 10, 30, 0.95);
+  --footer-bg: #0f0a1e;
+  --input-bg: rgba(45, 34, 72, 0.5);
+  --input-border: rgba(139, 92, 246, 0.3);
+  
+  --glow-gold: rgba(192, 132, 252, 0.3);
+  --glow-blue: rgba(139, 92, 246, 0.3);
+}
+
+[data-theme="midnight"] body::before {
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.1) 0%, transparent 50%);
+}
+
+[data-theme="midnight"] .text-gradient {
+  background: linear-gradient(135deg, #c084fc 0%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========================================
+   THEME SWITCHER STYLES
+   ======================================== */
+.theme-switcher {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+}
+
+.theme-toggle-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-blue) 100%);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+}
+
+.theme-menu {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+  min-width: 180px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.theme-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.theme-option:hover {
+  background: var(--bg-tertiary);
+}
+
+.theme-option.active {
+  background: var(--primary-gold);
+  color: var(--bg-primary);
+}
+
+.theme-option .theme-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.theme-color.dark { background: linear-gradient(135deg, #0a0e1a, #1e3a8a); }
+.theme-color.light { background: linear-gradient(135deg, #ffffff, #f1f5f9); }
+.theme-color.ocean { background: linear-gradient(135deg, #f0f9ff, #0ea5e9); }
+.theme-color.warm { background: linear-gradient(135deg, #fefce8, #f59e0b); }
+.theme-color.midnight { background: linear-gradient(135deg, #0f0a1e, #8b5cf6); }
+
+/* Mobile adjustments for theme switcher */
+@media (max-width: 768px) {
+  .theme-switcher {
+    bottom: 16px;
+    right: 16px;
+  }
+  
+  .theme-toggle-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+  
+  .theme-menu {
+    right: -8px;
+    bottom: 60px;
+  }
 }
 
 /* ========================================
@@ -672,9 +964,6 @@ footer {
 .social-link svg {
     width: 20px;
     height: 20px;
-    min-width: 20px;
-    min-height: 20px;
-    flex-shrink: 0;
 }
 
 /* Mobile responsive */
@@ -682,21 +971,6 @@ footer {
     .social-links {
         justify-content: center;
         margin-top: 1.5rem;
-    }
-    
-    /* Fix LinkedIn icon size on mobile */
-    .social-link {
-        width: 44px !important;
-        height: 44px !important;
-        min-width: 44px !important;
-        min-height: 44px !important;
-    }
-    
-    .social-link svg {
-        width: 22px !important;
-        height: 22px !important;
-        min-width: 22px !important;
-        min-height: 22px !important;
     }
 }
 
@@ -2155,17 +2429,12 @@ section[style] p[style*="color: rgba"] {
   cursor: pointer;
   padding: 0.75rem;
   position: relative;
-  z-index: 1002;
+  z-index: 1001;
   /* Make it bigger for touch */
   min-width: 48px;
   min-height: 48px;
   justify-content: center;
   align-items: center;
-  /* Ensure touch events work */
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-user-select: none;
 }
 
 .mobile-menu-btn span {
@@ -2202,12 +2471,10 @@ section[style] p[style*="color: rgba"] {
   left: 0;
   width: 100%;
   height: calc(100vh - 80px);
-  height: calc(100dvh - 80px); /* Use dynamic viewport height for mobile */
   background: rgba(10, 14, 26, 0.98);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   padding: 2rem;
-  z-index: 1001;
+  z-index: 1000;
   
   /* Hidden by default */
   transform: translateX(-100%);
@@ -2216,7 +2483,6 @@ section[style] p[style*="color: rgba"] {
   
   transition: all 0.3s ease;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 /* Open state */
@@ -2250,14 +2516,9 @@ section[style] p[style*="color: rgba"] {
   min-height: 48px;
   display: flex;
   align-items: center;
-  
-  /* Ensure touch events work */
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
 }
 
 .mobile-nav-link:hover,
-.mobile-nav-link:active,
 .mobile-nav-link.active {
   color: var(--primary-gold);
   background: rgba(212, 165, 116, 0.1);
@@ -2278,11 +2539,6 @@ section[style] p[style*="color: rgba"] {
   .mobile-menu-btn {
     display: flex !important;
   }
-  
-  /* Ensure header has proper z-index */
-  header {
-    z-index: 1000;
-  }
 }
 
 /* ========================================
@@ -2290,10 +2546,9 @@ section[style] p[style*="color: rgba"] {
    ======================================== */
 
 body.menu-open {
-  overflow: hidden !important;
+  overflow: hidden;
   position: fixed;
   width: 100%;
-  height: 100%;
 }
 
 /* ========================================
@@ -2307,18 +2562,13 @@ body.menu-open {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999; /* Below mobile menu (1001) but above other content */
+  z-index: 999;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
-  /* Ensure touch events work */
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  pointer-events: none; /* Disabled by default */
 }
 
 .menu-overlay.active {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto; /* Enable when active */
 }
