@@ -614,7 +614,7 @@ console.log('%cWebsite: https://axiquantai.com', 'color: #3b82f6;');
 
 document.addEventListener('DOMContentLoaded', function() {
   // Create theme switcher HTML
-  const themeSwitcherHTML = `
+  const themeSwitcherHTML = 
     <div class="theme-switcher">
       <button class="theme-toggle-btn" aria-label="Change theme" title="Change theme">
         🎨
@@ -642,7 +642,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </button>
       </div>
     </div>
-  `;
+  ;
   
   // Insert theme switcher into page
   document.body.insertAdjacentHTML('beforeend', themeSwitcherHTML);
