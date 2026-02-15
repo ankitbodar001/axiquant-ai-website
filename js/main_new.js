@@ -2,180 +2,116 @@
 // AxiQuant AI - Main JavaScript
 // ========================================
 
-// Initialize EmailJS with your public key (only if emailjs is loaded)
-if (typeof emailjs !== 'undefined') {
-  emailjs.init('ttowYJCftsKzoSAGO');
-} else {
-  // Try again after window loads
-  window.addEventListener('load', function() {
-    if (typeof emailjs !== 'undefined') {
-      emailjs.init('ttowYJCftsKzoSAGO');
-    }
-  });
-}
+// Initialize EmailJS with your public key
+emailjs.init('ttowYJCftsKzoSAGO');
 
 // ========================================
 // Mobile Menu Toggle (Enhanced with Accessibility)
 // ========================================
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const mobileMenu = document.querySelector('.mobile-menu');
+const body = document.body;
 
-// Wait for DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-  const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-  const mobileMenu = document.querySelector('.mobile-menu');
-  const body = document.body;
+// Create overlay element
+let menuOverlay = document.querySelector('.menu-overlay');
+if (!menuOverlay && mobileMenuBtn) {
+  menuOverlay = document.createElement('div');
+  menuOverlay.className = 'menu-overlay';
+  document.body.appendChild(menuOverlay);
+}
 
-  // Create overlay element
-  let menuOverlay = document.querySelector('.menu-overlay');
-  if (!menuOverlay && mobileMenuBtn) {
-    menuOverlay = document.createElement('div');
-    menuOverlay.className = 'menu-overlay';
-    document.body.appendChild(menuOverlay);
+if (mobileMenuBtn && mobileMenu) {
+  
+  // Function to open menu
+  function openMenu() {
+    mobileMenuBtn.classList.add('active');
+    mobileMenu.classList.add('open');
+    body.classList.add('menu-open');
+    if (menuOverlay) menuOverlay.classList.add('active');
+    
+    // Update ARIA
+    mobileMenuBtn.setAttribute('aria-expanded', 'true');
+    mobileMenu.setAttribute('aria-hidden', 'false');
+    
+    // Focus first link
+    setTimeout(() => {
+      const firstLink = mobileMenu.querySelector('a');
+      if (firstLink) firstLink.focus();
+    }, 100);
+    
+    console.log('Menu opened');
   }
-
-  if (mobileMenuBtn && mobileMenu) {
+  
+  // Function to close menu
+  function closeMenu() {
+    mobileMenuBtn.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    body.classList.remove('menu-open');
+    if (menuOverlay) menuOverlay.classList.remove('active');
     
-    // Function to open menu
-    function openMenu() {
-      mobileMenuBtn.classList.add('active');
-      mobileMenu.classList.add('open');
-      body.classList.add('menu-open');
-      if (menuOverlay) menuOverlay.classList.add('active');
-      
-      // Update ARIA
-      mobileMenuBtn.setAttribute('aria-expanded', 'true');
-      mobileMenu.setAttribute('aria-hidden', 'false');
-      
-      // Focus first link
-      setTimeout(() => {
-        const firstLink = mobileMenu.querySelector('a');
-        if (firstLink) firstLink.focus();
-      }, 100);
-      
-      console.log('Menu opened');
-    }
+    // Update ARIA
+    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+    mobileMenu.setAttribute('aria-hidden', 'true');
     
-    // Function to close menu
-    function closeMenu() {
-      mobileMenuBtn.classList.remove('active');
-      mobileMenu.classList.remove('open');
-      body.classList.remove('menu-open');
-      if (menuOverlay) menuOverlay.classList.remove('active');
-      
-      // Update ARIA
-      mobileMenuBtn.setAttribute('aria-expanded', 'false');
-      mobileMenu.setAttribute('aria-hidden', 'true');
-      
-      console.log('Menu closed');
-    }
-    
-    // Toggle menu on button click - using multiple event types for better mobile support
-    function handleMenuToggle(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      const isOpen = mobileMenu.classList.contains('open');
-      
-      if (isOpen) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-      
-      console.log('Menu button clicked, isOpen:', isOpen);
-    }
-    
-    // Add click event
-    mobileMenuBtn.addEventListener('click', handleMenuToggle);
-    
-    // Add touch event for better mobile support
-    mobileMenuBtn.addEventListener('touchend', function(e) {
-      e.preventDefault();
-      handleMenuToggle(e);
-    }, { passive: false });
-    
-    // Close menu when clicking a link - BUT allow navigation to happen
-    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-    mobileNavLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        // Don't prevent default - let the link navigate
-        // Just close the menu after a small delay to allow navigation
-        const href = this.getAttribute('href');
-        console.log('Link clicked:', href);
-        
-        // Close menu visually
-        closeMenu();
-        
-        // If it's a same-page anchor link, handle it
-        if (href && href.startsWith('#')) {
-          e.preventDefault();
-          const target = document.querySelector(href);
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
-        // For regular page links, navigation will happen naturally
-      });
-      
-      // Handle touch events for mobile
-      link.addEventListener('touchend', function(e) {
-        const href = this.getAttribute('href');
-        console.log('Link touched:', href);
-        
-        // For external page links, navigate directly
-        if (href && !href.startsWith('#')) {
-          // Small delay to show menu closing animation
-          closeMenu();
-          setTimeout(() => {
-            window.location.href = href;
-          }, 100);
-          e.preventDefault();
-        }
-      }, { passive: false });
-    });
-    
-    // Close menu when clicking overlay (but not menu content)
-    if (menuOverlay) {
-      menuOverlay.addEventListener('click', (e) => {
-        // Only close if clicking the overlay itself, not menu items
-        if (e.target === menuOverlay) {
-          closeMenu();
-          console.log('Overlay clicked, menu closing');
-        }
-      });
-      
-      menuOverlay.addEventListener('touchstart', (e) => {
-        // Only close if touching the overlay itself
-        if (e.target === menuOverlay) {
-          e.preventDefault();
-          closeMenu();
-          console.log('Overlay touched, menu closing');
-        }
-      }, { passive: false });
-    }
-    
-    // Close menu with Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
-        closeMenu();
-        mobileMenuBtn.focus();
-        console.log('Escape pressed, menu closing');
-      }
-    });
-    
-    // Prevent clicks inside menu from closing it
-    mobileMenu.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
-    
-    console.log('Mobile menu initialized');
-    console.log('Mobile Menu Button found:', !!mobileMenuBtn);
-    console.log('Mobile Menu found:', !!mobileMenu);
-  } else {
-    console.warn('Mobile menu elements not found');
-    console.log('Mobile Menu Button found:', !!mobileMenuBtn);
-    console.log('Mobile Menu found:', !!mobileMenu);
+    console.log('Menu closed');
   }
-});
+  
+  // Toggle menu on button click
+  mobileMenuBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const isOpen = mobileMenu.classList.contains('open');
+    
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+    
+    console.log('Menu button clicked, isOpen:', isOpen);
+  });
+  
+  // Close menu when clicking a link
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+  mobileNavLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      closeMenu();
+      console.log('Link clicked, menu closing');
+    });
+  });
+  
+  // Close menu when clicking overlay
+  if (menuOverlay) {
+    menuOverlay.addEventListener('click', () => {
+      closeMenu();
+      console.log('Overlay clicked, menu closing');
+    });
+  }
+  
+  // Close menu with Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+      closeMenu();
+      mobileMenuBtn.focus();
+      console.log('Escape pressed, menu closing');
+    }
+  });
+  
+  // Prevent clicks inside menu from closing it
+  mobileMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+  
+  console.log('Mobile menu initialized');
+}
+
+// ========================================
+// Debug: Log if elements are found
+// ========================================
+
+console.log('Mobile Menu Button found:', !!mobileMenuBtn);
+console.log('Mobile Menu found:', !!mobileMenu);
 
 // const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
 // const mobileMenu = document.querySelector('.mobile-menu');
@@ -671,3 +607,122 @@ document.head.appendChild(style);
 console.log('%cAxiQuant AI', 'font-size: 24px; font-weight: bold; color: #d4a574;');
 console.log('%cPowering Decisions with Engineered Intelligence', 'font-size: 14px; color: #9ca3af;');
 console.log('%cWebsite: https://axiquantai.com', 'color: #3b82f6;');
+
+// ========================================
+// Theme Switcher
+// ========================================
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Create theme switcher HTML
+  const themeSwitcherHTML = 
+    <div class="theme-switcher">
+      <button class="theme-toggle-btn" aria-label="Change theme" title="Change theme">
+        🎨
+      </button>
+      <div class="theme-menu" role="menu" aria-label="Theme options">
+        <button class="theme-option" data-theme="dark" role="menuitem">
+          <span class="theme-color dark"></span>
+          <span>Dark (Default)</span>
+        </button>
+        <button class="theme-option" data-theme="light" role="menuitem">
+          <span class="theme-color light"></span>
+          <span>Light</span>
+        </button>
+        <button class="theme-option" data-theme="ocean" role="menuitem">
+          <span class="theme-color ocean"></span>
+          <span>Ocean Blue</span>
+        </button>
+        <button class="theme-option" data-theme="warm" role="menuitem">
+          <span class="theme-color warm"></span>
+          <span>Warm Cream</span>
+        </button>
+        <button class="theme-option" data-theme="midnight" role="menuitem">
+          <span class="theme-color midnight"></span>
+          <span>Midnight Purple</span>
+        </button>
+      </div>
+    </div>
+  ;
+  
+  // Insert theme switcher into page
+  document.body.insertAdjacentHTML('beforeend', themeSwitcherHTML);
+  
+  const themeSwitcher = document.querySelector('.theme-switcher');
+  const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+  const themeMenu = document.querySelector('.theme-menu');
+  const themeOptions = document.querySelectorAll('.theme-option');
+  
+  // Load saved theme or use default
+  const savedTheme = localStorage.getItem('axiquant-theme') || 'dark';
+  setTheme(savedTheme);
+  
+  // Toggle menu
+  themeToggleBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    themeMenu.classList.toggle('open');
+  });
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!themeSwitcher.contains(e.target)) {
+      themeMenu.classList.remove('open');
+    }
+  });
+  
+  // Handle theme selection
+  themeOptions.forEach(option => {
+    option.addEventListener('click', function() {
+      const theme = this.dataset.theme;
+      setTheme(theme);
+      localStorage.setItem('axiquant-theme', theme);
+      themeMenu.classList.remove('open');
+    });
+  });
+  
+  function setTheme(theme) {
+    // Remove any existing theme
+    if (theme === 'dark') {
+      document.documentElement.removeAttribute('data-theme');
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+    
+    // Update active state on buttons
+    themeOptions.forEach(option => {
+      option.classList.toggle('active', option.dataset.theme === theme);
+    });
+    
+    // Update meta theme-color for mobile browsers
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      const themeColors = {
+        dark: '#0a0e1a',
+        light: '#ffffff',
+        ocean: '#f0f9ff',
+        warm: '#fefce8',
+        midnight: '#0f0a1e'
+      };
+      metaThemeColor.setAttribute('content', themeColors[theme] || '#0a0e1a');
+    }
+    
+    console.log('Theme changed to:', theme);
+  }
+  
+  // Keyboard navigation for theme menu
+  themeToggleBtn.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      themeMenu.classList.toggle('open');
+    }
+  });
+  
+  // Close menu with Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && themeMenu.classList.contains('open')) {
+      themeMenu.classList.remove('open');
+      themeToggleBtn.focus();
+    }
+  });
+  
+  console.log('✅ Theme switcher initialized');
+});
