@@ -199,6 +199,7 @@ Just edit the HTML files:
 
 | Item | Cost/Year |
 |------|-----------|
+
 | Domain (.in) | ₹799 |
 | Hosting (Netlify) | **FREE** ✅ |
 | SSL Certificate | **FREE** ✅ |
