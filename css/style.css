@@ -2513,19 +2513,28 @@ body.menu-open {
     right: 0;
   }
 }
+/* Fix theme switcher position on mobile */
 @media (max-width: 768px) {
   .theme-switcher-header {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    top: auto;
+    position: absolute;
+    right: 70px;  /* Move it left of the hamburger menu */
+    top: 50%;
+    transform: translateY(-50%);
     margin: 0;
-    z-index: 9999;
+    z-index: 1001;
+  }
+  
+  .theme-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .theme-icon {
+    font-size: 1rem;
   }
   
   .theme-dropdown {
-    bottom: 50px;
-    top: auto;
+    top: 45px;
     right: 0;
   }
 }
