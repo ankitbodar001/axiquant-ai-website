@@ -665,6 +665,65 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ========================================
+// Theme Switcher
+// ========================================
+
+document.addEventListener('DOMContentLoaded', function() {
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeDropdown = document.getElementById('theme-dropdown');
+  const themeOptions = document.querySelectorAll('.theme-option');
+  
+  if (!themeToggle) return; // Exit if no theme switcher on page
+  
+  // Load saved theme
+  const savedTheme = localStorage.getItem('axiquant-theme') || 'dark';
+  applyTheme(savedTheme);
+  
+  // Toggle dropdown
+  themeToggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    themeDropdown.classList.toggle('open');
+  });
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function() {
+    themeDropdown.classList.remove('open');
+  });
+  
+  // Handle theme selection
+  themeOptions.forEach(option => {
+    option.addEventListener('click', function() {
+      const theme = this.dataset.theme;
+      applyTheme(theme);
+      localStorage.setItem('axiquant-theme', theme);
+      themeDropdown.classList.remove('open');
+    });
+  });
+  
+  function applyTheme(theme) {
+    if (theme === 'dark') {
+      document.documentElement.removeAttribute('data-theme');
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+    
+    // Update active state
+    themeOptions.forEach(opt => {
+      opt.classList.toggle('active', opt.dataset.theme === theme);
+    });
+    
+    // Update meta theme-color
+    const metaColor = document.querySelector('meta[name="theme-color"]');
+    if (metaColor) {
+      const colors = { dark: '#0a0e1a', light: '#ffffff', ocean: '#f0f9ff', warm: '#fffbeb', midnight: '#0f0a1e' };
+      metaColor.setAttribute('content', colors[theme] || '#0a0e1a');
+    }
+  }
+  
+  console.log('✅ Theme switcher initialized');
+});
+
+// ========================================
 // Console Welcome Message
 // ========================================
 
