@@ -2513,3 +2513,19 @@ body.menu-open {
     right: 0;
   }
 }
+@media (max-width: 768px) {
+  .theme-switcher-header {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    top: auto;
+    margin: 0;
+    z-index: 9999;
+  }
+  
+  .theme-dropdown {
+    bottom: 50px;
+    top: auto;
+    right: 0;
+  }
+}
