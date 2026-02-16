@@ -167,10 +167,7 @@ header.scrolled {
   padding: 1.25rem 2rem;
   height: 80px;
 }
-.navbar::after {
-    display: none;
-  }
-  
+
 .logo {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 1.75rem;
@@ -2520,5 +2517,15 @@ body.menu-open {
     position: absolute;
     top: 60px;
     right: 60px;
+  }
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Group theme button and hamburger together on the right */
+  .navbar::after {
+    display: none;
   }
 }
