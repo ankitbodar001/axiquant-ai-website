@@ -2513,11 +2513,15 @@ body.menu-open {
     right: 0;
   }
 }
-/* Fix theme switcher position on mobile */
+/* Fix theme switcher position on mobile - ALIGNED WITH HAMBURGER */
 @media (max-width: 768px) {
+  .navbar {
+    position: relative;
+  }
+  
   .theme-switcher-header {
     position: absolute;
-    right: 70px;  /* Move it left of the hamburger menu */
+    right: 60px;  /* Space from hamburger menu */
     top: 50%;
     transform: translateY(-50%);
     margin: 0;
@@ -2525,16 +2529,29 @@ body.menu-open {
   }
   
   .theme-btn {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .theme-icon {
-    font-size: 1rem;
+    font-size: 1.1rem;
+    line-height: 1;
   }
   
   .theme-dropdown {
-    top: 45px;
+    top: 50px;
     right: 0;
+  }
+  
+  /* Make sure hamburger menu is also centered */
+  .mobile-menu-btn {
+    position: relative;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
