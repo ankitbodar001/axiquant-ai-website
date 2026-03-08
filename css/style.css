@@ -2529,3 +2529,38 @@ body.menu-open {
     display: none;
   }
 }
+/* AI Agent Button - Desktop */
+.btn-ai {
+    background: linear-gradient(135deg, #1e40af, #7c3aed) !important;
+    color: white !important;
+    padding: 8px 18px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    transition: all 0.3s ease !important;
+    border: none !important;
+    animation: glow 2s infinite;
+}
+
+.btn-ai:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.5) !important;
+    opacity: 0.95 !important;
+}
+
+/* Subtle glow animation to draw attention */
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 8px rgba(124, 58, 237, 0.3); }
+    50% { box-shadow: 0 0 16px rgba(124, 58, 237, 0.6); }
+}
+
+/* AI Agent Button - Mobile */
+.btn-ai-mobile {
+    background: linear-gradient(135deg, #1e40af, #7c3aed) !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    display: block !important;
+}
