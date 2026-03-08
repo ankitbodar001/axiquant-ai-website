@@ -130,241 +130,27 @@
 
                 <!-- Right: Animation -->
                 <div class="hero-animation">
-                    <div class="animation-wrapper" style="position:relative;width:100%;height:480px;">
-
-                        <!-- Canvas for neural network -->
-                        <canvas id="neuralCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:20px;"></canvas>
-
-                        <!-- Overlay labels -->
-                        <div style="position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;flex-wrap:wrap;justify-content:center;z-index:2;pointer-events:none;">
-                            <span class="ai-badge">🧠 AI/ML</span>
-                            <span class="ai-badge">🔧 Data Eng</span>
-                            <span class="ai-badge">⛓️ Blockchain</span>
-                            <span class="ai-badge">✨ Gen AI</span>
+                    <div class="animation-wrapper">
+                        <!-- Animated Bars -->
+                        <div class="data-bars">
+                            <div class="bar bar-1"></div>
+                            <div class="bar bar-2"></div>
+                            <div class="bar bar-3"></div>
+                            <div class="bar bar-4"></div>
+                            <div class="bar bar-5"></div>
                         </div>
-
-                        <!-- Center glowing orb -->
-                        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;pointer-events:none;text-align:center;">
-                            <div class="orb-core">
-                                <span style="font-size:32px;">🤖</span>
-                            </div>
-                            <div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">AxiQuant AI</div>
+                        
+                        <!-- Center Icon -->
+                        <div class="center-icon">
+                            <span class="pulse-icon">🤖</span>
                         </div>
-
-                        <!-- Floating metric cards -->
-                        <div class="metric-card" style="top:20%;left:4%;">
-                            <div class="metric-val">99.2%</div>
-                            <div class="metric-lbl">Model Accuracy</div>
-                        </div>
-                        <div class="metric-card" style="top:60%;left:4%;">
-                            <div class="metric-val">1.5M+</div>
-                            <div class="metric-lbl">Data Points</div>
-                        </div>
-                        <div class="metric-card" style="top:20%;right:4%;">
-                            <div class="metric-val">50ms</div>
-                            <div class="metric-lbl">Inference</div>
-                        </div>
-                        <div class="metric-card" style="top:60%;right:4%;">
-                            <div class="metric-val">24/7</div>
-                            <div class="metric-lbl">Uptime</div>
-                        </div>
+                        
+                        <!-- Floating Icons -->
+                        <div class="float-icon icon-1">📊</div>
+                        <div class="float-icon icon-2">⛓️</div>
+                        <div class="float-icon icon-3">✨</div>
                     </div>
                 </div>
-
-                <style>
-                .ai-badge {
-                    background: rgba(255,255,255,0.08);
-                    border: 1px solid rgba(255,255,255,0.15);
-                    color: rgba(255,255,255,0.85);
-                    padding: 4px 12px;
-                    border-radius: 20px;
-                    font-size: 11px;
-                    font-weight: 500;
-                    backdrop-filter: blur(8px);
-                    white-space: nowrap;
-                }
-                .orb-core {
-                    width: 80px;
-                    height: 80px;
-                    background: radial-gradient(circle at 35% 35%, #4f9eff, #1e3a8a);
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin: 0 auto;
-                    box-shadow:
-                        0 0 0 12px rgba(59,130,246,0.1),
-                        0 0 0 24px rgba(59,130,246,0.05),
-                        0 0 40px rgba(59,130,246,0.4);
-                    animation: orbPulse 3s ease-in-out infinite;
-                }
-                @keyframes orbPulse {
-                    0%,100% { box-shadow: 0 0 0 12px rgba(59,130,246,0.1), 0 0 0 24px rgba(59,130,246,0.05), 0 0 40px rgba(59,130,246,0.4); }
-                    50%      { box-shadow: 0 0 0 18px rgba(59,130,246,0.15), 0 0 0 36px rgba(59,130,246,0.07), 0 0 60px rgba(59,130,246,0.6); }
-                }
-                .metric-card {
-                    position: absolute;
-                    background: rgba(15,23,42,0.75);
-                    border: 1px solid rgba(59,130,246,0.3);
-                    border-radius: 10px;
-                    padding: 8px 14px;
-                    z-index: 2;
-                    backdrop-filter: blur(10px);
-                    animation: floatCard 4s ease-in-out infinite;
-                    min-width: 80px;
-                }
-                .metric-card:nth-child(odd)  { animation-delay: 0s; }
-                .metric-card:nth-child(even) { animation-delay: 2s; }
-                .metric-val {
-                    font-size: 18px;
-                    font-weight: 700;
-                    color: #60a5fa;
-                    line-height: 1.1;
-                }
-                .metric-lbl {
-                    font-size: 10px;
-                    color: rgba(255,255,255,0.5);
-                    margin-top: 2px;
-                    white-space: nowrap;
-                }
-                @keyframes floatCard {
-                    0%,100% { transform: translateY(0px); }
-                    50%      { transform: translateY(-8px); }
-                }
-                </style>
-
-                <script>
-                (function() {
-                    const canvas = document.getElementById('neuralCanvas');
-                    const ctx = canvas.getContext('2d');
-
-                    function resize() {
-                        const rect = canvas.parentElement.getBoundingClientRect();
-                        canvas.width  = rect.width  || 480;
-                        canvas.height = rect.height || 480;
-                    }
-                    resize();
-                    window.addEventListener('resize', resize);
-
-                    // Node layers: input → hidden1 → hidden2 → output
-                    const layers = [4, 6, 6, 4];
-                    let nodes = [];
-                    let pulses = [];
-
-                    function buildNodes() {
-                        nodes = [];
-                        const w = canvas.width, h = canvas.height;
-                        const layerXPositions = [0.15, 0.37, 0.63, 0.85];
-                        layers.forEach((count, li) => {
-                            const x = w * layerXPositions[li];
-                            for (let ni = 0; ni < count; ni++) {
-                                const y = h * (0.2 + 0.6 * (ni / (count - 1 || 1)));
-                                nodes.push({ x, y, layer: li, idx: ni, glow: Math.random() });
-                            }
-                        });
-                    }
-                    buildNodes();
-
-                    function getLayerNodes(li) {
-                        return nodes.filter(n => n.layer === li);
-                    }
-
-                    function spawnPulse() {
-                        // pick random connection
-                        const li = Math.floor(Math.random() * (layers.length - 1));
-                        const from = getLayerNodes(li);
-                        const to   = getLayerNodes(li + 1);
-                        const src  = from[Math.floor(Math.random() * from.length)];
-                        const dst  = to[Math.floor(Math.random() * to.length)];
-                        pulses.push({ sx: src.x, sy: src.y, ex: dst.x, ey: dst.y, t: 0, speed: 0.008 + Math.random() * 0.006 });
-                    }
-
-                    // Spawn pulses periodically
-                    setInterval(spawnPulse, 180);
-
-                    function draw() {
-                        const w = canvas.width, h = canvas.height;
-                        ctx.clearRect(0, 0, w, h);
-
-                        // Background gradient
-                        const bg = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, w * 0.7);
-                        bg.addColorStop(0, 'rgba(30,58,138,0.18)');
-                        bg.addColorStop(1, 'rgba(15,23,42,0.0)');
-                        ctx.fillStyle = bg;
-                        ctx.fillRect(0, 0, w, h);
-
-                        // Draw edges between adjacent layers
-                        for (let li = 0; li < layers.length - 1; li++) {
-                            const from = getLayerNodes(li);
-                            const to   = getLayerNodes(li + 1);
-                            from.forEach(src => {
-                                to.forEach(dst => {
-                                    ctx.beginPath();
-                                    ctx.moveTo(src.x, src.y);
-                                    ctx.lineTo(dst.x, dst.y);
-                                    ctx.strokeStyle = 'rgba(59,130,246,0.10)';
-                                    ctx.lineWidth = 0.8;
-                                    ctx.stroke();
-                                });
-                            });
-                        }
-
-                        // Draw pulses along edges
-                        pulses = pulses.filter(p => p.t <= 1);
-                        pulses.forEach(p => {
-                            p.t += p.speed;
-                            const px = p.sx + (p.ex - p.sx) * p.t;
-                            const py = p.sy + (p.ey - p.sy) * p.t;
-                            const alpha = Math.sin(p.t * Math.PI);
-
-                            // Trail
-                            const grad = ctx.createLinearGradient(p.sx, p.sy, px, py);
-                            grad.addColorStop(0, `rgba(59,130,246,0)`);
-                            grad.addColorStop(1, `rgba(99,179,255,${alpha * 0.6})`);
-                            ctx.beginPath();
-                            ctx.moveTo(p.sx, p.sy);
-                            ctx.lineTo(px, py);
-                            ctx.strokeStyle = grad;
-                            ctx.lineWidth = 1.5;
-                            ctx.stroke();
-
-                            // Glow dot
-                            const dot = ctx.createRadialGradient(px, py, 0, px, py, 5);
-                            dot.addColorStop(0, `rgba(147,197,253,${alpha})`);
-                            dot.addColorStop(1, 'rgba(59,130,246,0)');
-                            ctx.beginPath();
-                            ctx.arc(px, py, 5, 0, Math.PI * 2);
-                            ctx.fillStyle = dot;
-                            ctx.fill();
-                        });
-
-                        // Draw nodes
-                        nodes.forEach(n => {
-                            n.glow += 0.02;
-                            const glow = 0.5 + 0.5 * Math.sin(n.glow);
-
-                            // Outer ring
-                            ctx.beginPath();
-                            ctx.arc(n.x, n.y, 10, 0, Math.PI * 2);
-                            ctx.strokeStyle = `rgba(59,130,246,${0.2 + 0.3 * glow})`;
-                            ctx.lineWidth = 1;
-                            ctx.stroke();
-
-                            // Inner fill
-                            const ng = ctx.createRadialGradient(n.x - 2, n.y - 2, 0, n.x, n.y, 7);
-                            ng.addColorStop(0, `rgba(147,197,253,${0.7 + 0.3 * glow})`);
-                            ng.addColorStop(1, `rgba(30,58,138,${0.8})`);
-                            ctx.beginPath();
-                            ctx.arc(n.x, n.y, 7, 0, Math.PI * 2);
-                            ctx.fillStyle = ng;
-                            ctx.fill();
-                        });
-
-                        requestAnimationFrame(draw);
-                    }
-                    draw();
-                })();
-                </script>
             </div>
 
             <!-- Stats Section - BELOW, CENTERED, FULL WIDTH -->
@@ -506,6 +292,21 @@
                     </ul>
                     <a href="services.html" class="btn btn-secondary">Learn More →</a>
                 </div>
+                
+                <div class="service-card card">
+                    <div class="service-icon">🤖</div>
+                    <h3 class="service-title">Agentic AI Platform</h3>
+                    <p class="service-description">
+                        Multi-domain AI agent that researches, analyzes, and delivers enterprise-grade insights for your industry.
+                    </p>
+                    <ul class="service-features">
+                        <li>Multi-Agent Orchestration</li>
+                        <li>6 Industry Domains</li>
+                        <li>Real-time Web Research</li>
+                        <li>Actionable Recommendations</li>
+                    </ul>
+                    <a href="ai-agent.html" target="_blank" class="btn btn-secondary">Try Live Demo →</a>
+                </div>
             </div>
         </div>
     </section>
@@ -584,7 +385,7 @@
                 <address style="font-style: normal;">
                     <p style="color: var(--text-secondary); margin-bottom: 1rem;">
                         <span aria-label="Email">📧</span> 
-                        <a href="/cdn-cgi/l/email-protection#abc2c5cdc4ebcad3c2dadecac5dfcac285c8c4c6"><span class="__cf_email__" data-cfemail="ec85828a83ac8d94859d998d82988d85c28f8381">[email&#160;protected]</span></a><br>
+                        <a href="mailto:info@axiquantai.com">info@axiquantai.com</a><br>
                         <span aria-label="Location">📍</span> Surat, Gujarat, India
                     </p>
                 </address>
