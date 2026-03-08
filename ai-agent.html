@@ -16,7 +16,6 @@
       flex-direction: column;
     }
 
-    /* Header */
     .header {
       background: #1e293b;
       padding: 16px 24px;
@@ -38,7 +37,6 @@
       50% { opacity: 0.4; }
     }
 
-    /* Domain selector */
     .domain-bar {
       background: #1e293b;
       padding: 10px 24px;
@@ -58,7 +56,6 @@
       cursor: pointer;
     }
 
-    /* Chat area */
     #messages {
       flex: 1;
       overflow-y: auto;
@@ -69,23 +66,24 @@
     }
 
     .message {
-      max-width: 75%;
+      max-width: 80%;
       padding: 12px 16px;
       border-radius: 12px;
       font-size: 14px;
       line-height: 1.6;
-      white-space: pre-wrap;
     }
     .message.user {
       background: #1e40af;
       align-self: flex-end;
       border-bottom-right-radius: 4px;
+      white-space: pre-wrap;
     }
     .message.assistant {
       background: #1e293b;
       align-self: flex-start;
       border-bottom-left-radius: 4px;
       border: 1px solid #334155;
+      max-width: 90%;
     }
     .message.thinking {
       background: #1e293b;
@@ -95,7 +93,6 @@
       border: 1px solid #334155;
     }
 
-    /* Welcome message */
     .welcome {
       text-align: center;
       padding: 40px 20px;
@@ -121,7 +118,6 @@
     }
     .suggestion-btn:hover { background: #334155; color: white; }
 
-    /* Input area */
     .input-area {
       padding: 16px 24px;
       background: #1e293b;
@@ -161,21 +157,57 @@
     }
     #send-btn:hover { background: #1d4ed8; }
     #send-btn:disabled { background: #334155; cursor: not-allowed; }
+
+    /* Markdown rendered styles */
+    .message.assistant h2 {
+      color: #93c5fd;
+      font-size: 1.1em;
+      margin: 16px 0 8px;
+      font-weight: 700;
+    }
+    .message.assistant h3 {
+      color: #a5b4fc;
+      font-size: 1em;
+      margin: 12px 0 6px;
+      font-weight: 600;
+    }
+    .message.assistant table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+    .message.assistant td, .message.assistant th {
+      padding: 8px 12px;
+      border: 1px solid #334155;
+    }
+    .message.assistant th {
+      background: #334155;
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    .message.assistant .md-list-item {
+      margin: 4px 0;
+      padding: 4px 0 4px 16px;
+    }
+    .message.assistant .md-numbered {
+      margin: 6px 0;
+      padding: 6px 0 6px 16px;
+      border-left: 3px solid #3b82f6;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
   <div class="header">
     <div class="status-dot"></div>
     <h1>🤖 AxiQuant AI Agent</h1>
     <span>Enterprise AI Assistant</span>
   </div>
 
-  <!-- Domain selector -->
   <div class="domain-bar">
     <label>Industry Domain:</label>
-    <select id="domain-select">
+    <select id="domain-select" onchange="updateSuggestions(this.value)">
       <option value="retail">🛒 Retail</option>
       <option value="pharma">💊 Pharma</option>
       <option value="manufacturing">🏭 Manufacturing</option>
@@ -185,21 +217,14 @@
     </select>
   </div>
 
-  <!-- Messages -->
   <div id="messages">
     <div class="welcome" id="welcome">
       <h2>Welcome to AxiQuant AI</h2>
       <p>Your enterprise AI assistant. Ask anything about your business.</p>
-      <div class="suggestions">
-        <button class="suggestion-btn" onclick="askSuggestion(this)">Design an ETL pipeline for sales data</button>
-        <button class="suggestion-btn" onclick="askSuggestion(this)">How to predict next year's budget?</button>
-        <button class="suggestion-btn" onclick="askSuggestion(this)">What KPIs should I track?</button>
-        <button class="suggestion-btn" onclick="askSuggestion(this)">Optimize supply chain management</button>
-      </div>
+      <div class="suggestions" id="suggestions-container"></div>
     </div>
   </div>
 
-  <!-- Input -->
   <div class="input-area">
     <textarea id="user-input" placeholder="Ask anything about your business..." rows="1"
       onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); sendMessage(); }"></textarea>
@@ -209,41 +234,139 @@
 <script>
   const API_URL = "https://axiquant-ai-agent.onrender.com/chat";
 
+  // ── Domain examples ──────────────────────────────────────────────────────
+  const DOMAIN_EXAMPLES = {
+    retail: [
+      "Design an ETL pipeline for sales data on Azure",
+      "How do I predict next year's inventory budget?",
+      "What KPIs should I track for retail performance?",
+      "How to reduce cart abandonment rate?",
+      "Analyze customer lifetime value and retention strategies"
+    ],
+    pharma: [
+      "How do I track drug development pipeline stages?",
+      "What are the key FDA compliance requirements for drug approval?",
+      "How to optimize clinical trial management and reporting?",
+      "Design a pharmacovigilance adverse event tracking system",
+      "What metrics should I monitor for R&D pipeline performance?"
+    ],
+    manufacturing: [
+      "How do I implement predictive maintenance for equipment?",
+      "Design a production planning and scheduling system",
+      "How to reduce defect rates and improve OEE?",
+      "What is the best approach for supply chain optimization?",
+      "How to set up real-time quality control monitoring?"
+    ],
+    real_estate: [
+      "How do I build a property valuation model?",
+      "What KPIs should I track for real estate portfolio performance?",
+      "How to automate lead qualification for property buyers?",
+      "Analyze cap rate and ROI for investment properties",
+      "How to forecast rental market trends using historical data?"
+    ],
+    automotive: [
+      "How do I optimize vehicle inventory management?",
+      "Design a customer lead scoring system for car sales",
+      "What metrics should I track for service department performance?",
+      "How to forecast parts demand and reduce stockouts?",
+      "Analyze customer satisfaction and retention strategies"
+    ],
+    energy: [
+      "How do I build an energy demand forecasting model?",
+      "Design a grid monitoring and anomaly detection system",
+      "What KPIs should I track for renewable energy performance?",
+      "How to optimize energy distribution and reduce losses?",
+      "Analyze customer usage patterns to improve efficiency"
+    ]
+  };
+
+  // ── Update suggestion buttons when domain changes ─────────────────────────
+  function updateSuggestions(domain) {
+    const container = document.getElementById('suggestions-container');
+    const examples = DOMAIN_EXAMPLES[domain] || DOMAIN_EXAMPLES['retail'];
+    container.innerHTML = examples.map(q =>
+      `<button class="suggestion-btn" onclick="askSuggestion(this)">${q}</button>`
+    ).join('');
+  }
+
+  // ── Click a suggestion ────────────────────────────────────────────────────
   function askSuggestion(btn) {
     document.getElementById('user-input').value = btn.innerText;
     sendMessage();
   }
 
+  // ── Markdown renderer ─────────────────────────────────────────────────────
+  function renderMarkdown(text) {
+    // Escape raw HTML first
+    text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    // Tables — detect and rebuild
+    text = text.replace(/^(\|.+\|)$/gm, function(line) {
+      if (/^\|[\s\-|]+\|$/.test(line)) return ''; // skip separator rows
+      const cells = line.split('|').slice(1, -1).map(c => c.trim());
+      return '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+    });
+    // Wrap orphan <tr> rows in a table
+    text = text.replace(/(<tr>[\s\S]*?<\/tr>)/g, function(block) {
+      if (block.includes('<table')) return block;
+      return `<table>${block}</table>`;
+    });
+
+    // Headers
+    text = text.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+    text = text.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+    text = text.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+
+    // Bold & italic
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong style="color:#e2e8f0;">$1</strong>');
+    text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+    // Numbered list items with bold title: "1. **Title**: rest"
+    text = text.replace(/^\d+\.\s+\*\*(.+?)\*\*:?\s*(.*)/gm,
+      '<div class="md-numbered"><strong style="color:#93c5fd;">$1</strong><span style="color:#cbd5e1;"> $2</span></div>');
+
+    // Plain numbered list items
+    text = text.replace(/^\d+\.\s+(.+)/gm,
+      '<div class="md-list-item">• $1</div>');
+
+    // Bullet points (- or *)
+    text = text.replace(/^[-*]\s+(.+)/gm,
+      '<div class="md-list-item">• $1</div>');
+
+    // Code blocks
+    text = text.replace(/`([^`]+)`/g,
+      '<code style="background:#334155;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px;">$1</code>');
+
+    // Line breaks
+    text = text.replace(/\n\n/g, '<br><br>');
+    text = text.replace(/\n/g, '<br>');
+
+    return text;
+  }
+
+  // ── Send message ──────────────────────────────────────────────────────────
   async function sendMessage() {
     const input = document.getElementById('user-input');
     const messages = document.getElementById('messages');
     const sendBtn = document.getElementById('send-btn');
     const domain = document.getElementById('domain-select').value;
     const text = input.value.trim();
-    
+
     if (!text) return;
 
     // Hide welcome screen
     const welcome = document.getElementById('welcome');
     if (welcome) welcome.style.display = 'none';
 
-    // Add user message
-    messages.innerHTML += `<div class="message user">${escapeHtml(text)}</div>`;
+    // Show user message
+    messages.innerHTML += `<div class="message user">${text}</div>`;
     input.value = '';
     input.style.height = 'auto';
     sendBtn.disabled = true;
 
-    // Add thinking indicator
+    // Show thinking indicator
     const thinkingId = 'thinking-' + Date.now();
-    // Wrap tables properly
-    const formatted = renderMarkdown(data.response)
-        .replace(/(<tr>.*?<\/tr>)/gs, (match) => {
-            if (!match.includes('<table')) {
-                return `<table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;">${match}</table>`;
-            }
-            return match;
-        });
-    messages.innerHTML += `<div class="message assistant">${formatted}</div>`;
+    messages.innerHTML += `<div class="message thinking" id="${thinkingId}">🤔 Analyzing your question...</div>`;
     messages.scrollTop = messages.scrollHeight;
 
     try {
@@ -253,8 +376,14 @@
         body: JSON.stringify({ message: text, domain: domain })
       });
       const data = await res.json();
+
+      // Remove thinking indicator
       document.getElementById(thinkingId).remove();
-      messages.innerHTML += `<div class="message assistant">${escapeHtml(data.response)}</div>`;
+
+      // Render markdown response
+      const formatted = renderMarkdown(data.response);
+      messages.innerHTML += `<div class="message assistant">${formatted}</div>`;
+
     } catch (e) {
       document.getElementById(thinkingId).remove();
       messages.innerHTML += `<div class="message assistant">⚠️ Error connecting to AI. Please try again.</div>`;
@@ -265,35 +394,15 @@
     input.focus();
   }
 
-  function renderMarkdown(text) {
-    return text
-        // Headers
-        .replace(/^## (.*$)/gim, '<h2 style="color:#93c5fd;font-size:1.1em;margin:16px 0 8px;font-weight:700;">$1</h2>')
-        .replace(/^### (.*$)/gim, '<h3 style="color:#a5b4fc;font-size:1em;margin:12px 0 6px;font-weight:600;">$1</h3>')
-        // Bold
-        .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#e2e8f0;">$1</strong>')
-        // Tables
-        .replace(/^\|(.+)\|$/gim, function(match) {
-            if (match.includes('---')) return '';
-            const cells = match.split('|').filter(c => c.trim());
-            const isHeader = false;
-            return '<tr>' + cells.map(c => `<td style="padding:8px 12px;border:1px solid #334155;">${c.trim()}</td>`).join('') + '</tr>';
-        })
-        // Numbered lists
-        .replace(/^\d+\.\s+\*\*(.*?)\*\*:?(.*$)/gim, '<div style="margin:6px 0;padding:6px 0 6px 16px;border-left:3px solid #3b82f6;"><strong style="color:#93c5fd;">$1</strong><span style="color:#cbd5e1;">$2</span></div>')
-        .replace(/^\d+\.\s+(.*$)/gim, '<div style="margin:4px 0;padding:4px 0 4px 16px;">• $1</div>')
-        // Bullet points
-        .replace(/^\t\*\s+(.*$)/gim, '<div style="margin:3px 0;padding:3px 0 3px 32px;color:#94a3b8;">◦ $1</div>')
-        .replace(/^\*\s+(.*$)/gim, '<div style="margin:4px 0;padding:4px 0 4px 16px;">• $1</div>')
-        // Line breaks
-        .replace(/\n\n/g, '<br>')
-        .replace(/\n/g, ' ');
-}
-
-  // Auto-resize textarea
+  // ── Auto-resize textarea ──────────────────────────────────────────────────
   document.getElementById('user-input').addEventListener('input', function() {
     this.style.height = 'auto';
     this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+
+  // ── Init on load ──────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    updateSuggestions('retail');
   });
 </script>
 </body>
