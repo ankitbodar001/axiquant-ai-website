@@ -83,7 +83,7 @@
       align-self: flex-start;
       border-bottom-left-radius: 4px;
       border: 1px solid #334155;
-      max-width: 90%;
+      max-width: 92%;
     }
     .message.thinking {
       background: #1e293b;
@@ -158,12 +158,14 @@
     #send-btn:hover { background: #1d4ed8; }
     #send-btn:disabled { background: #334155; cursor: not-allowed; }
 
-    /* Markdown rendered styles */
+    /* ── Markdown styles ── */
     .message.assistant h2 {
       color: #93c5fd;
       font-size: 1.1em;
       margin: 16px 0 8px;
       font-weight: 700;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 4px;
     }
     .message.assistant h3 {
       color: #a5b4fc;
@@ -171,29 +173,55 @@
       margin: 12px 0 6px;
       font-weight: 600;
     }
+    /* Clean compact table */
     .message.assistant table {
       width: 100%;
       border-collapse: collapse;
-      margin: 12px 0;
+      margin: 10px 0;
       font-size: 13px;
+      table-layout: auto;
     }
-    .message.assistant td, .message.assistant th {
-      padding: 8px 12px;
-      border: 1px solid #334155;
+    .message.assistant thead tr {
+      background: #273549;
     }
     .message.assistant th {
-      background: #334155;
+      padding: 8px 12px;
+      border: 1px solid #475569;
       color: #93c5fd;
       font-weight: 600;
+      text-align: left;
+    }
+    .message.assistant td {
+      padding: 7px 12px;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      vertical-align: top;
+    }
+    .message.assistant tbody tr:nth-child(even) {
+      background: #1a2535;
+    }
+    .message.assistant tbody tr:hover {
+      background: #223044;
     }
     .message.assistant .md-list-item {
-      margin: 4px 0;
-      padding: 4px 0 4px 16px;
+      margin: 3px 0;
+      padding: 3px 0 3px 16px;
+      color: #cbd5e1;
     }
     .message.assistant .md-numbered {
       margin: 6px 0;
-      padding: 6px 0 6px 16px;
+      padding: 6px 12px;
       border-left: 3px solid #3b82f6;
+      background: #162032;
+      border-radius: 0 6px 6px 0;
+    }
+    .message.assistant code {
+      background: #334155;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #7dd3fc;
     }
   </style>
 </head>
@@ -234,7 +262,6 @@
 <script>
   const API_URL = "https://axiquant-ai-agent.onrender.com/chat";
 
-  // ── Domain examples ──────────────────────────────────────────────────────
   const DOMAIN_EXAMPLES = {
     retail: [
       "Design an ETL pipeline for sales data on Azure",
@@ -280,7 +307,6 @@
     ]
   };
 
-  // ── Update suggestion buttons when domain changes ─────────────────────────
   function updateSuggestions(domain) {
     const container = document.getElementById('suggestions-container');
     const examples = DOMAIN_EXAMPLES[domain] || DOMAIN_EXAMPLES['retail'];
@@ -289,58 +315,106 @@
     ).join('');
   }
 
-  // ── Click a suggestion ────────────────────────────────────────────────────
   function askSuggestion(btn) {
     document.getElementById('user-input').value = btn.innerText;
     sendMessage();
   }
 
   // ── Markdown renderer ─────────────────────────────────────────────────────
-  function renderMarkdown(text) {
-    // Escape raw HTML first
-    text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  function renderMarkdown(raw) {
+    const lines = raw.split('\n');
+    let html = '';
+    let inTable = false;
+    let tableHtml = '';
+    let isFirstTableRow = true;
 
-    // Tables — detect and rebuild
-    text = text.replace(/^(\|.+\|)$/gm, function(line) {
-      if (/^\|[\s\-|]+\|$/.test(line)) return ''; // skip separator rows
-      const cells = line.split('|').slice(1, -1).map(c => c.trim());
-      return '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
-    });
-    // Wrap orphan <tr> rows in a table
-    text = text.replace(/(<tr>[\s\S]*?<\/tr>)/g, function(block) {
-      if (block.includes('<table')) return block;
-      return `<table>${block}</table>`;
-    });
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
 
-    // Headers
-    text = text.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-    text = text.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-    text = text.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+      // ── Table rows ──
+      if (/^\|.+\|/.test(line)) {
+        // Skip separator rows like |---|---|
+        if (/^\|[\s\-:|]+\|/.test(line)) {
+          isFirstTableRow = false; // next rows are tbody
+          continue;
+        }
+        const cells = line.split('|').slice(1, -1).map(c =>
+          processInline(c.trim())
+        );
+        if (isFirstTableRow) {
+          if (!inTable) {
+            tableHtml = '<table><thead>';
+            inTable = true;
+          }
+          tableHtml += '<tr>' + cells.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
+          isFirstTableRow = false;
+        } else {
+          tableHtml += '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+        }
+        continue;
+      } else if (inTable) {
+        // Close table when non-table line encountered
+        tableHtml += '</tbody></table>';
+        html += tableHtml;
+        tableHtml = '';
+        inTable = false;
+        isFirstTableRow = true;
+      }
 
-    // Bold & italic
+      // ── Headers ──
+      if (/^### (.+)/.test(line)) {
+        html += `<h3>${processInline(line.replace(/^### /, ''))}</h3>`;
+      } else if (/^## (.+)/.test(line)) {
+        html += `<h2>${processInline(line.replace(/^## /, ''))}</h2>`;
+      } else if (/^# (.+)/.test(line)) {
+        html += `<h2>${processInline(line.replace(/^# /, ''))}</h2>`;
+
+      // ── Numbered list with bold title ──
+      } else if (/^\d+\.\s+\*\*(.+?)\*\*/.test(line)) {
+        const match = line.match(/^\d+\.\s+\*\*(.+?)\*\*:?\s*(.*)/);
+        if (match) {
+          html += `<div class="md-numbered"><strong style="color:#93c5fd;">${match[1]}</strong>`;
+          if (match[2]) html += `<span style="color:#cbd5e1;"> ${processInline(match[2])}</span>`;
+          html += `</div>`;
+        }
+
+      // ── Plain numbered list ──
+      } else if (/^\d+\.\s+/.test(line)) {
+        html += `<div class="md-list-item">• ${processInline(line.replace(/^\d+\.\s+/, ''))}</div>`;
+
+      // ── Bullet points ──
+      } else if (/^[-*]\s+/.test(line)) {
+        html += `<div class="md-list-item">• ${processInline(line.replace(/^[-*]\s+/, ''))}</div>`;
+
+      // ── Empty line ──
+      } else if (line.trim() === '') {
+        html += '<br>';
+
+      // ── Normal paragraph ──
+      } else {
+        html += `<p style="margin:4px 0;">${processInline(line)}</p>`;
+      }
+    }
+
+    // Close any unclosed table
+    if (inTable) {
+      tableHtml += '</tbody></table>';
+      html += tableHtml;
+    }
+
+    return html;
+  }
+
+  // Process inline markdown (bold, italic, code)
+  function processInline(text) {
+    // Escape HTML
+    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    // Bold
     text = text.replace(/\*\*(.+?)\*\*/g, '<strong style="color:#e2e8f0;">$1</strong>');
+    // Italic
     text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-    // Numbered list items with bold title: "1. **Title**: rest"
-    text = text.replace(/^\d+\.\s+\*\*(.+?)\*\*:?\s*(.*)/gm,
-      '<div class="md-numbered"><strong style="color:#93c5fd;">$1</strong><span style="color:#cbd5e1;"> $2</span></div>');
-
-    // Plain numbered list items
-    text = text.replace(/^\d+\.\s+(.+)/gm,
-      '<div class="md-list-item">• $1</div>');
-
-    // Bullet points (- or *)
-    text = text.replace(/^[-*]\s+(.+)/gm,
-      '<div class="md-list-item">• $1</div>');
-
-    // Code blocks
-    text = text.replace(/`([^`]+)`/g,
-      '<code style="background:#334155;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px;">$1</code>');
-
-    // Line breaks
-    text = text.replace(/\n\n/g, '<br><br>');
-    text = text.replace(/\n/g, '<br>');
-
+    // Inline code
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
     return text;
   }
 
@@ -354,17 +428,14 @@
 
     if (!text) return;
 
-    // Hide welcome screen
     const welcome = document.getElementById('welcome');
     if (welcome) welcome.style.display = 'none';
 
-    // Show user message
     messages.innerHTML += `<div class="message user">${text}</div>`;
     input.value = '';
     input.style.height = 'auto';
     sendBtn.disabled = true;
 
-    // Show thinking indicator
     const thinkingId = 'thinking-' + Date.now();
     messages.innerHTML += `<div class="message thinking" id="${thinkingId}">🤔 Analyzing your question...</div>`;
     messages.scrollTop = messages.scrollHeight;
@@ -376,14 +447,9 @@
         body: JSON.stringify({ message: text, domain: domain })
       });
       const data = await res.json();
-
-      // Remove thinking indicator
       document.getElementById(thinkingId).remove();
-
-      // Render markdown response
       const formatted = renderMarkdown(data.response);
       messages.innerHTML += `<div class="message assistant">${formatted}</div>`;
-
     } catch (e) {
       document.getElementById(thinkingId).remove();
       messages.innerHTML += `<div class="message assistant">⚠️ Error connecting to AI. Please try again.</div>`;
@@ -394,13 +460,11 @@
     input.focus();
   }
 
-  // ── Auto-resize textarea ──────────────────────────────────────────────────
   document.getElementById('user-input').addEventListener('input', function() {
     this.style.height = 'auto';
     this.style.height = Math.min(this.scrollHeight, 120) + 'px';
   });
 
-  // ── Init on load ──────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function() {
     updateSuggestions('retail');
   });
