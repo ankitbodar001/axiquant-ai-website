@@ -187,7 +187,7 @@ header.scrolled {
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 1.6rem;
   list-style: none;
 }
 
@@ -197,6 +197,7 @@ header.scrolled {
   font-size: 0.9375rem;
   padding: 0.5rem 0;
   position: relative;
+  white-space: nowrap;
 }
 
 .nav-link::after {
@@ -2268,8 +2269,8 @@ section[style] p[style*="color: rgba"] {
    3. Show mobile menu button on mobile
    ======================================== */
 
-@media (max-width: 768px) {
-  /* Hide desktop menu */
+@media (max-width: 1200px) {
+  /* Hide desktop menu (collapses earlier now that the nav has more items) */
   .nav-menu {
     display: none !important;
   }
@@ -3186,3 +3187,73 @@ body.menu-open {
   font-size: 0.9rem;
 }
 .case-preview-card:hover .case-preview-link { color: var(--primary-gold); }
+
+/* ========================================
+   Industries (Milestone 5)
+   ======================================== */
+.industry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+.industry-card { display: flex; flex-direction: column; }
+.industry-icon { font-size: 2.25rem; margin-bottom: 0.75rem; }
+.industry-card h2 { font-size: 1.45rem; margin-bottom: 0.75rem; }
+.industry-challenge { color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.25rem; }
+.industry-card h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent-blue);
+  margin-bottom: 0.6rem;
+}
+.industry-list { list-style: none; padding: 0; margin: 0 0 1.25rem; }
+.industry-list li {
+  position: relative;
+  padding-left: 1.4rem;
+  margin-bottom: 0.55rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.industry-list li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  color: var(--primary-gold);
+  font-weight: 700;
+}
+.industry-proof {
+  background: rgba(212, 165, 116, 0.08);
+  border-left: 3px solid var(--primary-gold);
+  padding: 0.75rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin-bottom: 1.25rem;
+}
+.industry-proof strong { color: var(--primary-gold); }
+.industry-link {
+  margin-top: auto;
+  color: var(--accent-blue);
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.industry-link:hover { color: var(--primary-gold); }
+
+@media (max-width: 768px) {
+  .industry-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+
+/* Industries preview mini-grid on homepage (Milestone 5) */
+.industries-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.industry-mini { text-align: center; text-decoration: none; display: block; }
+.industry-mini .industry-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.industry-mini h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.industry-mini p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin: 0; }
+.industry-mini:hover h3 { color: var(--primary-gold); }
+@media (max-width: 900px) { .industries-mini-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .industries-mini-grid { grid-template-columns: 1fr; } }

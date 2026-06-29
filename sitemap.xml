@@ -25,6 +25,12 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://axiquantai.com/industries.html</loc>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://axiquantai.com/careers.html</loc>
     <lastmod>2026-01-17</lastmod>
     <changefreq>weekly</changefreq>
