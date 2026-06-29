@@ -160,7 +160,7 @@
     }
 
     /* ════════════════════════════════
-       LAYER 3 — Blockchain chain
+       LAYER 3 — Data chain
     ════════════════════════════════ */
     let chain = [], chainT = 0;
 
@@ -297,10 +297,10 @@
     const LABELS = [
         { text:'AI/ML',        rx:0.15, ry:0.20 },
         { text:'Data Eng',     rx:0.82, ry:0.18 },
-        { text:'Blockchain',   rx:0.14, ry:0.72 },
+        { text:'Automation',   rx:0.14, ry:0.72 },
         { text:'Gen AI',       rx:0.80, ry:0.70 },
-        { text:'99.2% Acc',    rx:0.50, ry:0.12 },
-        { text:'1.5M Points',  rx:0.50, ry:0.90 },
+        { text:'Analytics',    rx:0.50, ry:0.12 },
+        { text:'Forecasting',  rx:0.50, ry:0.90 },
     ];
     let labelPhases = LABELS.map((_, i) => i * 1.1);
 
