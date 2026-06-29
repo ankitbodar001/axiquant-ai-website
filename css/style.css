@@ -3091,3 +3091,23 @@ body.menu-open {
   border-radius: 16px;
   display: block;
 }
+
+/* ===== Honest stats additions (Milestone 2) ===== */
+.stats-eyebrow {
+  text-align: center;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+.stat-box {
+  max-width: 210px;
+}
+.stat-context {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-top: 0.4rem;
+  line-height: 1.35;
+}
