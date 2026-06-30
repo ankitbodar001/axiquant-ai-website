@@ -377,6 +377,20 @@ if (contactForm) {
       message: contactForm.message.value
     };
     
+    // Guard: EmailJS library must be loaded
+    if (typeof emailjs === 'undefined') {
+      console.error('EmailJS library not loaded. Check the CDN <script> and any ad-blocker / network policy.');
+      if (errorMsg) {
+        errorMsg.style.display = 'flex';
+        errorMsg.setAttribute('role', 'alert');
+        errorMsg.textContent = 'The email service did not load. Please disable any ad-blocker and refresh, or email us directly at info@axiquantai.com';
+      }
+      submitBtn.disabled = false;
+      submitBtn.setAttribute('aria-busy', 'false');
+      submitBtn.innerHTML = originalText;
+      return;
+    }
+
     // Send email via EmailJS
     emailjs.send('service_8iub6d9', 'template_6zzmzpm', templateParams)
       .then(function(response) {
@@ -413,9 +427,11 @@ if (contactForm) {
         submitBtn.innerHTML = originalText;
       })
       .catch(function(error) {
-        console.error('FAILED...', error);
-        
-        // Show error message
+        // Surface the real reason: status + text from EmailJS
+        var status = error && (error.status || (error.text ? '' : 'network'));
+        var text = error && (error.text || error.message || String(error));
+        console.error('EmailJS send FAILED →', 'status:', status, '| reason:', text, '| full:', error);
+
         if (errorMsg) {
           errorMsg.style.display = 'flex';
           errorMsg.setAttribute('role', 'alert');
