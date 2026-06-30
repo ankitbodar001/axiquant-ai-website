@@ -383,6 +383,22 @@ header.scrolled {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
+/* Visual modernization (Milestone 12): gradient top-accent on hover */
+.card { position: relative; overflow: hidden; }
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-gold), var(--accent-blue));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s ease;
+}
+.card:hover::before { transform: scaleX(1); }
+
 /* ========================================
    Grid
    ======================================== */
@@ -473,7 +489,7 @@ footer {
 }
 
 .fade-in-up {
-  animation: fadeInUp 0.8s ease-out;
+  animation: fadeInUp 0.7s ease-out backwards;
 }
 
 /* ========================================
@@ -2923,9 +2939,12 @@ body.menu-open {
    ======================================== */
 
 .page-hero {
+  position: relative;
   padding: 8rem 0 4rem;
   text-align: center;
-  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  background:
+    radial-gradient(ellipse 55% 70% at 50% -10%, rgba(212, 165, 116, 0.10), transparent 70%),
+    linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
 }
 
 .mission-content {

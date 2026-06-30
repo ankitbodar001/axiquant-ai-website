@@ -290,13 +290,18 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.classList.add('fade-in-up');
-      observer.unobserve(entry.target);
+      const el = entry.target;
+      // gentle stagger so a grid reveals as one orchestrated cascade
+      const sibs = el.parentElement ? Array.from(el.parentElement.children) : [el];
+      const idx = Math.min(Math.max(sibs.indexOf(el), 0), 6);
+      el.style.animationDelay = (idx * 70) + 'ms';
+      el.classList.add('fade-in-up');
+      observer.unobserve(el);
     }
   });
 }, observerOptions);
 
-document.querySelectorAll('.card, .service-card, .benefit-card, .value-card').forEach(el => {
+document.querySelectorAll('.card, .service-card, .benefit-card, .value-card, .process-step, .trust-item, .case-study').forEach(el => {
   observer.observe(el);
 });
 
