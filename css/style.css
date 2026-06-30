@@ -3244,16 +3244,108 @@ body.menu-open {
   .industry-grid { grid-template-columns: 1fr; gap: 1.5rem; }
 }
 
-/* Industries preview mini-grid on homepage (Milestone 5) */
+/* Industries preview mini-grid on homepage (Milestone 5, layout fixed M6) */
 .industries-mini-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
 }
-.industry-mini { text-align: center; text-decoration: none; display: block; }
-.industry-mini .industry-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-.industry-mini h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
-.industry-mini p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin: 0; }
+.industry-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+}
+/* top row: icon + title together */
+.industry-mini-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+.industry-mini .industry-icon { font-size: 1.6rem; margin: 0; line-height: 1; }
+.industry-mini h3 { font-size: 1.1rem; margin: 0; color: var(--text-primary); }
+/* second row: description */
+.industry-mini p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.55; margin: 0; }
 .industry-mini:hover h3 { color: var(--primary-gold); }
 @media (max-width: 900px) { .industries-mini-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px) { .industries-mini-grid { grid-template-columns: 1fr; } }
+
+/* ========================================
+   Process + Cross-border Trust (Milestone 6)
+   ======================================== */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+}
+.process-step {
+  position: relative;
+  padding: 1.5rem 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  border-radius: var(--radius-lg);
+  transition: var(--transition);
+}
+.process-step:hover { border-color: var(--primary-gold); transform: translateY(-4px); }
+.process-num {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--primary-navy);
+  background: var(--primary-gold);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+.process-step h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.process-step p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.55; margin: 0; }
+
+.trust-section { background: var(--bg-secondary); }
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem;
+}
+.trust-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  border-radius: var(--radius-lg);
+}
+.trust-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+.trust-item h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+.trust-item p { color: var(--text-secondary); line-height: 1.65; margin: 0; }
+
+@media (max-width: 1024px) {
+  .process-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .process-grid { grid-template-columns: 1fr; }
+  .trust-grid { grid-template-columns: 1fr; }
+}
+
+/* ========================================
+   Legal pages + footer legal links (Milestone 6)
+   ======================================== */
+.legal-content { max-width: 820px; margin: 0 auto; }
+.legal-content p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.1rem; }
+.legal-content h2 {
+  font-size: 1.3rem;
+  margin: 2.25rem 0 0.75rem;
+  color: var(--text-primary);
+}
+.legal-content a { color: var(--accent-blue); }
+.legal-content a:hover { color: var(--primary-gold); }
+.legal-updated { font-size: 0.9rem; color: var(--text-tertiary) !important; margin-bottom: 2rem !important; }
+.footer-legal { margin-top: 0.5rem; font-size: 0.85rem; }
+.footer-legal a { color: var(--text-tertiary); }
+.footer-legal a:hover { color: var(--primary-gold); }
