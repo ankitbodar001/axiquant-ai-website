@@ -3400,3 +3400,47 @@ body.menu-open {
   .insights-grid { grid-template-columns: 1fr; }
   .article h1 { font-size: 1.7rem; }
 }
+
+/* ========================================
+   Contact optimization (Milestone 10)
+   ======================================== */
+.contact-steps {
+  list-style: none;
+  counter-reset: step;
+  padding: 0;
+  margin: 0 0 2rem;
+}
+.contact-steps li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 2.75rem;
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+.contact-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--primary-navy);
+  background: var(--primary-gold);
+  border-radius: 50%;
+}
+.contact-steps li strong { color: var(--text-primary); }
+.form-microcopy {
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+  margin-top: 1rem;
+}
+.form-microcopy a { color: var(--accent-blue); }
+.form-microcopy a:hover { color: var(--primary-gold); }

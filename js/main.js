@@ -373,7 +373,7 @@ if (contactForm) {
       from_name: contactForm.from_name.value,
       from_email: contactForm.from_email.value,
       company: contactForm.company ? contactForm.company.value : 'Not provided',
-      subject: contactForm.subject.value,
+      subject: 'Website consultation request',
       message: contactForm.message.value
     };
     
