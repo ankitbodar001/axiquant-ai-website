@@ -3349,3 +3349,8 @@ body.menu-open {
 .footer-legal { margin-top: 0.5rem; font-size: 0.85rem; }
 .footer-legal a { color: var(--text-tertiary); }
 .footer-legal a:hover { color: var(--primary-gold); }
+
+/* About story prose (Milestone 7) */
+.about-story { max-width: 760px; margin: 0 auto; }
+.about-story p { color: var(--text-secondary); line-height: 1.85; font-size: 1.05rem; margin-bottom: 1.25rem; }
+.about-story p:last-child { margin-bottom: 0; }
