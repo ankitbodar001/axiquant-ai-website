@@ -361,13 +361,41 @@
         drawOrb(c);
         drawLabels(c);
 
-        requestAnimationFrame(draw);
+        rafId = requestAnimationFrame(draw);
     }
+
+    // ---- Performance: only animate when visible (saves CPU/battery) ----
+    let rafId = null;
+    let onScreen = true;
+    let tabVisible = !document.hidden;
+
+    function running() { return rafId !== null; }
+    function play() {
+        if (!running() && onScreen && tabVisible) {
+            rafId = requestAnimationFrame(draw);
+        }
+    }
+    function pause() {
+        if (running()) { cancelAnimationFrame(rafId); rafId = null; }
+    }
+
+    // Pause when the hero scrolls out of view
+    if ('IntersectionObserver' in window && canvas) {
+        new IntersectionObserver((entries) => {
+            onScreen = entries[0].isIntersecting;
+            onScreen ? play() : pause();
+        }, { threshold: 0.01 }).observe(canvas);
+    }
+    // Pause when the browser tab is hidden
+    document.addEventListener('visibilitychange', () => {
+        tabVisible = !document.hidden;
+        tabVisible ? play() : pause();
+    });
 
     // Wait for layout then start
     function start() {
         resize();
-        draw();
+        play();
     }
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', start);
