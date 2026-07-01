@@ -371,6 +371,7 @@
 
     function running() { return rafId !== null; }
     function play() {
+        if (!(W > 0 && H > 0)) resize();   // ensure canvas is sized before first draw
         if (!running() && onScreen && tabVisible) {
             rafId = requestAnimationFrame(draw);
         }
